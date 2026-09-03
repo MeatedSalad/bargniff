@@ -1,17 +1,1249 @@
-<!DOCTYPE html>
-<head>
-    <title>Bargniff</title>
-</head>
-<body>
-    <div id="header">
-    <img src="image.jpeg" alt="image unavailable" width="240px">
-    <h1>CCCBargniff</h1>
-    </div>
-</body>
-<style>
-    #header {
-        text-align: center;
-        gap: 20px;
-    }
-</style>
+<!doctype html>
+<html lang="it">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<title>Bargniff</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+		<link
+			href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Raleway:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap"
+			rel="stylesheet"
+		/>
+
+		<style>
+			@font-face {
+				font-family: "Les Flos Sage";
+				src: url("assets/fonts/Les-Flos-Sage.otf") format("opentype");
+			}
+
+			@font-face {
+				font-family: "Les Flos Chaos";
+				src: url("assets/fonts/Les-Flos-Chaos.otf") format("opentype");
+			}
+
+			@font-face {
+				font-family: "Les Flos Sans";
+				src: url("assets/fonts/Les-Flos-Sans.otf") format("opentype");
+			}
+
+			:root {
+				--brown: #432f2c;
+				--gold: #c8a627;
+				--cream: #fbf9e1;
+				--forest: #06754d;
+				--mint: #17fc96;
+				--shadow: 0 18px 40px -20px rgba(67, 47, 44, 0.45);
+				--ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+			}
+
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+
+			html {
+				scroll-behavior: smooth;
+			}
+
+			body {
+				background: var(--cream);
+				color: var(--brown);
+				font-family: "Raleway", sans-serif;
+				line-height: 1.6;
+				overflow-x: hidden;
+				-webkit-font-smoothing: antialiased;
+			}
+
+			h1, h2, h3 {
+				font-family: "Fredoka", sans-serif;
+				font-weight: 600;
+				line-height: 1.05;
+			}
+
+			a {
+				color: inherit;
+				text-decoration: none;
+			}
+
+			img {
+				max-width: 100%;
+				display: block;
+			}
+
+			ul {
+				list-style: none;
+			}
+
+			::selection {
+				background: var(--mint);
+				color: var(--brown);
+			}
+
+			:focus-visible {
+				outline: 3px solid var(--forest);
+				outline-offset: 3px;
+				border-radius: 4px;
+			}
+
+			.wrap {
+				width: 100%;
+				max-width: 1180px;
+				margin: 0 auto;
+				padding: 0 32px;
+			}
+
+			/* header */
+
+			header {
+				position: fixed;
+				top: 0;
+				left: 0;
+				right: 0;
+				z-index: 100;
+				background: var(--brown);
+				color: var(--cream);
+				border-bottom: 2px solid var(--gold);
+			}
+
+			.nav {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				padding: 14px 32px;
+				max-width: 1180px;
+				margin: 0 auto;
+			}
+
+			.brand {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				font-family: "Les Flos Sage", sans-serif;
+				font-size: 1.5rem;
+				color: var(--cream);
+			}
+
+			.brand img {
+				width: 38px;
+				height: 38px;
+				object-fit: contain;
+			}
+
+			/* hero */
+
+			.hero {
+				position: relative;
+				min-height: 80vh;
+				display: flex;
+				align-items: center;
+				padding: 60px 0;
+				overflow: hidden;
+				background: var(--cream);
+			}
+
+			.hero .wrap {
+				max-width: 100%;
+				padding: 0 40px;
+			}
+
+			.hero-copy {
+				position: relative;
+				z-index: 2;
+				width: 100%;
+				text-align: center;
+			}
+
+			.hero-copy h1 {
+				max-width: 900px;
+				margin: 0 auto;
+				font-size: clamp(2.6rem, 5.4vw, 4.6rem);
+				color: var(--brown);
+				text-align: center;
+			}
+
+			.hero-copy h1 span {
+				display: block;
+				margin-top: 10px;
+				color: var(--forest);
+			}
+
+			/* decorazione hero: laghetto con increspature e rana */
+
+			.pond {
+				position: absolute;
+				right: -6%;
+				top: 50%;
+				width: min(52vw, 720px);
+				transform: translateY(-50%);
+				z-index: 1;
+				filter: drop-shadow(0 30px 50px rgba(67, 47, 44, 0.25));
+			}
+
+			.pond svg {
+				width: 100%;
+				display: block;
+			}
+
+			.ripple {
+				transform-origin: center;
+				opacity: 0;
+				animation: ripple 4.5s var(--ease) infinite;
+			}
+
+			.ripple.r2 { animation-delay: 1.5s; }
+			.ripple.r3 { animation-delay: 3s; }
+
+			@keyframes ripple {
+				from { transform: scale(0.7); opacity: 0.55; }
+				to { transform: scale(1.55); opacity: 0; }
+			}
+
+			.hero-frog {
+				position: absolute;
+				left: 50%;
+				top: 50%;
+				width: 46%;
+				transform: translate(-50%, -46%);
+				animation: bob 6s ease-in-out infinite;
+			}
+
+			@keyframes bob {
+				0%, 100% { transform: translate(-50%, -46%) rotate(0); }
+				50% { transform: translate(-50%, -49%) rotate(-2deg); }
+			}
+
+			.lily {
+				position: absolute;
+				border-radius: 50%;
+				background: var(--forest);
+				opacity: 0.9;
+			}
+
+			.lily::after {
+				content: "";
+				position: absolute;
+				inset: 18%;
+				border-radius: 50%;
+				background: var(--mint);
+				opacity: 0.35;
+			}
+
+			/* onde tra le sezioni */
+
+			.wave {
+				position: relative;
+				width: 100%;
+				height: 130px;
+				overflow: hidden;
+				line-height: 0;
+				margin: -1px 0;
+				padding: 0;
+				background: transparent;
+			}
+
+			.wave svg {
+				display: block;
+				width: 200%;
+				height: 100%;
+			}
+
+			.wave path {
+				stroke: none;
+			}
+
+			.wave-back-layer {
+				opacity: 0.3;
+			}
+
+			.wave-up svg {
+				animation: wave-drift-rtl 22s linear infinite;
+			}
+
+			.wave-down svg {
+				animation: wave-drift-ltr 22s linear infinite;
+			}
+
+			@keyframes wave-drift-rtl {
+				from { transform: translateX(0); }
+				to { transform: translateX(-50%); }
+			}
+
+			@keyframes wave-drift-ltr {
+				from { transform: translateX(-50%); }
+				to { transform: translateX(0); }
+			}
+
+			/* sezioni generiche */
+
+			section {
+				position: relative;
+			}
+
+			.section-pad {
+				padding: 30px 0;
+			}
+
+			/* missione */
+
+			.mission {
+				background: var(--brown);
+				color: var(--cream);
+			}
+
+			.mission .wrap {
+				display: grid;
+				grid-template-columns: 0.9fr 1.1fr;
+				gap: 36px;
+				align-items: center;
+			}
+
+			/* pannello testo missione */
+
+			.mission-info-panel {
+				position: relative;
+				min-height: 370px;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				padding: 44px 40px;
+				overflow: hidden;
+				border: 1px solid rgba(251, 249, 225, 0.15);
+				border-radius: 30px;
+				background: rgba(251, 249, 225, 0.06);
+				box-shadow: inset 0 1px 0 rgba(251, 249, 225, 0.1);
+			}
+
+			.mission-info-panel::before {
+				content: "";
+				position: absolute;
+				width: 220px;
+				height: 220px;
+				top: -120px;
+				right: -95px;
+				border-radius: 50%;
+				background: var(--forest);
+				opacity: 0.45;
+			}
+
+			.mission-info-panel > * {
+				position: relative;
+				z-index: 1;
+			}
+
+			.mission-info-panel .eyebrow {
+				margin-bottom: 14px;
+				color: var(--mint);
+				font-family: "Caveat", cursive;
+				font-size: 1.25rem;
+				font-weight: 700;
+			}
+
+			.mission-info-panel h2 {
+				color: var(--cream);
+				font-size: clamp(2rem, 3.2vw, 2.55rem);
+				transition: color 0.25s var(--ease);
+			}
+
+			.mission-info-panel p:last-child {
+				max-width: 430px;
+				margin-top: 18px;
+				color: rgba(251, 249, 225, 0.8);
+				font-size: 1.03rem;
+			}
+
+			.mission-info-panel.is-active h2 {
+				color: var(--mint);
+			}
+
+			/* laghetto della missione */
+
+			.mission-pond-scene {
+				position: relative;
+				width: 108%;
+				max-width: 900px;
+				margin: 0 auto;
+				isolation: isolate;
+			}
+
+			.mission-pond-scene::before {
+				content: "";
+				position: absolute;
+				left: 6%;
+				right: 6%;
+				bottom: -5%;
+				height: 26%;
+				z-index: 0;
+				background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 40%, rgba(0, 0, 0, 0) 75%);
+				pointer-events: none;
+			}
+
+			.mission-pond {
+				position: relative;
+				width: 100%;
+				aspect-ratio: 1.32/1;
+				overflow: hidden;
+				isolation: isolate;
+				z-index: 1;
+				background:
+					radial-gradient(ellipse at 26% 22%, rgba(103, 244, 202, 0.34), transparent 22%),
+					radial-gradient(ellipse at 75% 74%, rgba(1, 79, 72, 0.48), transparent 47%),
+					radial-gradient(ellipse at 55% 48%, rgba(91, 211, 225, 0.19), transparent 42%),
+					linear-gradient(135deg, #149fc0 0%, #087ca7 48%, #056b83 100%);
+				border-radius: 58% 42% 63% 37% / 42% 66% 34% 58%;
+				border: 12px solid rgba(251, 249, 225, 0.35);
+				box-shadow:
+					inset 0 0 0 2px rgba(208, 255, 237, 0.24),
+					inset 18px 20px 60px rgba(0, 45, 69, 0.22),
+					inset -24px -20px 50px rgba(0, 44, 55, 0.24);
+			}
+
+			.mission-pond::before {
+				content: "";
+				position: absolute;
+				inset: 4% 6% 8% 3%;
+				z-index: 1;
+				pointer-events: none;
+				border-radius: 62% 38% 68% 32% / 36% 69% 31% 64%;
+				border: 3px solid rgba(251, 249, 225, 0.25);
+			}
+
+			.mission-pond::after {
+				content: "";
+				position: absolute;
+				inset: 0;
+				z-index: 0;
+				pointer-events: none;
+				background:
+					radial-gradient(ellipse at 18% 80%, rgba(223, 255, 232, 0.28) 0 2%, transparent 2.6%),
+					radial-gradient(ellipse at 77% 17%, rgba(223, 255, 232, 0.24) 0 1.8%, transparent 2.4%),
+					linear-gradient(118deg, transparent 39%, rgba(232, 255, 248, 0.18) 47%, transparent 54%);
+				mix-blend-mode: screen;
+				animation: waterGlint 9s ease-in-out infinite alternate;
+			}
+
+			@keyframes waterGlint {
+				from { transform: translateX(-8%) translateY(2%); }
+				to { transform: translateX(8%) translateY(-2%); }
+			}
+
+			/* increspature statiche del laghetto */
+
+			.pond-ripple {
+				position: absolute;
+				border: 2px solid rgba(251, 249, 225, 0.15);
+				border-radius: 50%;
+				pointer-events: none;
+				z-index: 1;
+				box-shadow: 0 0 18px rgba(198, 255, 238, 0.08);
+			}
+
+			.pond-ripple.ripple-a {
+				width: 55%;
+				height: 24%;
+				left: 23%;
+				top: 38%;
+			}
+
+			.pond-ripple.ripple-b {
+				width: 40%;
+				height: 18%;
+				left: 30%;
+				top: 53%;
+				transform: rotate(-8deg);
+			}
+
+			/* cespugli intorno al laghetto */
+
+			.bush {
+				position: absolute;
+				width: 60px;
+				height: 50px;
+				z-index: 2;
+				pointer-events: none;
+				border-radius: 50% 50% 45% 45%;
+				background: radial-gradient(ellipse at 30% 30%, #7cb342 0%, #558b2f 50%, #33691e 100%);
+				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+			}
+
+			.bush::after {
+				content: "";
+				position: absolute;
+				width: 40px;
+				height: 35px;
+				top: -10px;
+				left: 15px;
+				border-radius: 50%;
+				background: radial-gradient(ellipse at 40% 40%, #8bc34a 0%, #689f38 60%, #4a7c2c 100%);
+				opacity: 0.9;
+			}
+
+			.bush::before {
+				content: "";
+				position: absolute;
+				width: 35px;
+				height: 30px;
+				top: -5px;
+				left: -5px;
+				border-radius: 50%;
+				background: radial-gradient(ellipse at 35% 35%, #9ccc65 0%, #7cb342 60%, #5a8a2e 100%);
+				opacity: 0.85;
+			}
+
+			.bush-1 { top: -20px; left: -15px; }
+			.bush-2 { top: 10%; left: -25px; transform: scale(0.85); }
+			.bush-3 { bottom: -15px; left: 5%; transform: scale(0.9); }
+			.bush-4 { top: -25px; right: -20px; transform: scale(0.95); }
+			.bush-5 { top: 15%; right: -30px; transform: scale(0.8); }
+			.bush-6 { bottom: -20px; right: 8%; transform: scale(0.85); }
+
+			/* ninfee del laghetto (le tre voci del menu) */
+
+			.water-lily {
+				position: absolute;
+				width: 140px;
+				height: 120px;
+				z-index: 3;
+				cursor: pointer;
+				transition: transform 0.3s var(--ease), filter 0.3s var(--ease);
+			}
+
+			.water-lily:hover,
+			.water-lily:focus-within {
+				transform: scale(1.15) rotate(-3deg);
+				filter: drop-shadow(0 15px 15px rgba(0, 0, 0, 0.25));
+			}
+
+			.water-lily::before {
+				content: "";
+				position: absolute;
+				inset: 0;
+				border-radius: 50%;
+				background: radial-gradient(circle at 35% 30%, #5fbf65, #045c45 75%);
+				-webkit-mask: conic-gradient(from -20deg, #000 0deg 320deg, transparent 320deg 360deg);
+				mask: conic-gradient(from -20deg, #000 0deg 320deg, transparent 320deg 360deg);
+				filter: drop-shadow(0 8px 8px rgba(0, 0, 0, 0.2));
+			}
+
+			.water-lily::after {
+				content: "";
+				position: absolute;
+				width: 36px;
+				height: 36px;
+				left: 50%;
+				top: 50%;
+				transform: translate(-50%, -50%);
+				border-radius: 50%;
+				background: var(--mint);
+				box-shadow: 0 0 0 7px rgba(23, 252, 150, 0.18);
+			}
+
+			.water-lily button {
+				position: absolute;
+				inset: 0;
+				z-index: 2;
+				appearance: none;
+				border: 0;
+				background: transparent;
+				cursor: pointer;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				padding: 0 22px;
+				font-family: "Fredoka", sans-serif;
+				font-size: 1.25rem;
+				font-weight: 700;
+				color: var(--cream);
+				text-align: center;
+				text-shadow: 0 2px 4px rgba(0, 55, 44, 0.6);
+			}
+
+			.water-lily button:focus-visible {
+				outline: 3px solid var(--cream);
+				outline-offset: 4px;
+				border-radius: 50%;
+			}
+
+			.lily-one { left: 15%; top: 30%; transform: rotate(-8deg); }
+			.lily-two { right: 15%; top: 35%; transform: rotate(8deg); }
+
+			.lily-donation {
+				left: 50%;
+				bottom: 15%;
+				transform: translateX(-50%) rotate(0deg) scale(0.95);
+			}
+
+			.lily-donation::before {
+				background: radial-gradient(circle at 35% 30%, #72bb59, #064f3d 75%);
+			}
+
+			.lily-donation:hover,
+			.lily-donation:focus-within {
+				transform: translateX(-50%) scale(1.1) rotate(0);
+			}
+
+			/* ninfee piccole, solo decorative */
+
+			.mini-lily {
+				width: 76px;
+				height: 64px;
+				z-index: 2;
+				opacity: 0.88;
+				pointer-events: none;
+				animation: lilyDrift 6s ease-in-out infinite;
+			}
+
+			.mini-lily::after {
+				width: 18px;
+				height: 18px;
+				box-shadow: 0 0 0 4px rgba(23, 252, 150, 0.17);
+			}
+
+			.mini-one { left: 38%; bottom: 17%; }
+			.mini-two { right: 35%; top: 16%; animation-delay: -3s; }
+
+			@keyframes lilyDrift {
+				0%, 100% { transform: rotate(-10deg) translateY(0); }
+				50% { transform: rotate(-4deg) translateY(-6px); }
+			}
+
+			.lily-one:hover,
+			.lily-one:focus-within,
+			.lily-two:hover,
+			.lily-two:focus-within {
+				transform: scale(1.1) rotate(0);
+			}
+
+			/* perché le rane: le tre card */
+
+			.why {
+				background: var(--cream);
+				padding-top: 120px;
+				padding-bottom: 70px;
+			}
+
+			.why-grid {
+				display: grid;
+				grid-template-columns: repeat(3, 1fr);
+				gap: 28px;
+			}
+
+			.why-card {
+				padding: 34px 28px;
+				background: #fff8e6;
+				border: 1px solid rgba(67, 47, 44, 0.08);
+				border-radius: 26px;
+				transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+			}
+
+			.why-card:hover {
+				transform: translateY(-8px);
+				box-shadow: var(--shadow);
+			}
+
+			.why-icon {
+				width: 64px;
+				height: 64px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				margin-bottom: 20px;
+				border-radius: 18px;
+			}
+
+			.why-icon img {
+				width: 70%;
+			}
+
+			.why-card:nth-child(1) .why-icon { background: #eadfb4; }
+			.why-card:nth-child(2) .why-icon { background: var(--brown); }
+			.why-card:nth-child(3) .why-icon { background: var(--forest); }
+
+			.why-card h3 {
+				margin-bottom: 10px;
+				font-size: 1.25rem;
+			}
+
+			.why-card p {
+				color: rgba(67, 47, 44, 0.75);
+				font-size: 0.98rem;
+			}
+
+			/* sezione donazione (verde) */
+
+			.donation-section {
+				position: relative;
+				background: var(--forest);
+				color: var(--cream);
+				overflow: hidden;
+			}
+
+			.donation-content-wrap {
+				position: relative;
+				z-index: 2;
+				padding: 60px 0;
+			}
+
+			.donation-box {
+				position: relative;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				text-align: center;
+				gap: 20px;
+				max-width: 950px;
+				margin: 0 auto;
+				padding: 70px 56px;
+				overflow: hidden;
+				background: var(--brown);
+				color: var(--cream);
+				border-radius: 36px;
+				scroll-margin-top: 110px;
+			}
+
+			.donation-box::before,
+			.donation-box::after {
+				content: "";
+				position: absolute;
+				border-radius: 50%;
+			}
+
+			.donation-box::before {
+				width: 280px;
+				height: 280px;
+				top: -140px;
+				left: -90px;
+				background: var(--forest);
+				opacity: 0.5;
+			}
+
+			.donation-box::after {
+				width: 220px;
+				height: 220px;
+				right: -60px;
+				bottom: -120px;
+				background: var(--gold);
+				opacity: 0.25;
+			}
+
+			.donation-content {
+				position: relative;
+				z-index: 2;
+			}
+
+			.donation-content h3 {
+				margin-bottom: 12px;
+				color: var(--cream);
+				font-size: clamp(1.9rem, 3.4vw, 2.6rem);
+			}
+
+			.donation-content p {
+				max-width: 460px;
+				margin: 0 auto;
+				color: rgba(251, 249, 225, 0.82);
+				font-size: 1.05rem;
+			}
+
+			.donation-button {
+				position: relative;
+				z-index: 2;
+				flex-shrink: 0;
+				padding: 20px 52px;
+				border-radius: 100px;
+				background: var(--mint);
+				color: var(--brown);
+				font-size: 1.2rem;
+				font-weight: 700;
+				transition: transform 0.25s var(--ease), background 0.25s var(--ease);
+			}
+
+			.donation-button:hover {
+				background: #3cffa8;
+				transform: translateY(-3px);
+			}
+
+			/* decorazioni della sezione donazione */
+
+			.donation-section::before {
+				content: "";
+				position: absolute;
+				width: 420px;
+				height: 420px;
+				top: -240px;
+				left: -120px;
+				border-radius: 50%;
+				background: rgba(23, 252, 150, 0.08);
+				pointer-events: none;
+			}
+
+			.donation-section::after {
+				content: "";
+				position: absolute;
+				width: 320px;
+				height: 320px;
+				right: -140px;
+				bottom: -190px;
+				border-radius: 50%;
+				background: rgba(200, 166, 39, 0.14);
+				pointer-events: none;
+			}
+
+			/* footer */
+
+			footer {
+				padding: 90px 0 40px;
+			}
+
+			.foot-top {
+				display: grid;
+				grid-template-columns: 1.4fr 1fr;
+				gap: 50px;
+			}
+
+			.foot-brand {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				margin-bottom: 14px;
+				font-family: "Fredoka", sans-serif;
+				font-size: 1.3rem;
+				font-weight: 700;
+			}
+
+			.foot-brand img {
+				width: 34px;
+			}
+
+			.foot-col p {
+				max-width: 280px;
+				color: rgba(67, 47, 44, 0.7);
+				font-size: 0.95rem;
+			}
+
+			.foot-col h4 {
+				margin-bottom: 16px;
+				color: var(--forest);
+				font-size: 0.82rem;
+				letter-spacing: 0.06em;
+				text-transform: uppercase;
+			}
+
+			.foot-col ul li {
+				margin-bottom: 10px;
+				font-size: 0.95rem;
+			}
+
+			.foot-col ul li a:hover {
+				color: var(--forest);
+			}
+
+			/* animazione di comparsa allo scroll */
+
+			.reveal {
+				opacity: 0;
+				transform: translateY(24px);
+				transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+			}
+
+			.reveal.in {
+				opacity: 1;
+				transform: translateY(0);
+			}
+
+			/* responsive */
+
+			@media (max-width: 920px) {
+				.mission .wrap { grid-template-columns: 1fr; }
+				.mission-pond-scene { width: 105%; max-width: 850px; }
+				.why-grid { grid-template-columns: 1fr; }
+				.foot-top { grid-template-columns: 1fr; gap: 34px; }
+			}
+
+			@media (max-width: 760px) {
+				.nav { padding: 12px 20px; }
+				.hero { padding-top: 188px; }
+				.hero .wrap { padding: 0 20px; }
+				.hero-copy h1 { font-size: clamp(2.8rem, 12vw, 6rem); }
+
+				.pond {
+					width: 82vw;
+					top: auto;
+					bottom: -6%;
+					transform: none;
+					opacity: 0.9;
+				}
+
+				.wave { height: 90px; }
+				.mission-pond-scene { width: 112%; max-width: 650px; }
+				.mission-pond { aspect-ratio: 1.25/1; }
+				.water-lily { width: 105px; height: 88px; }
+				.water-lily button { padding: 0 17px; font-size: 0.85rem; }
+
+				.lily-donation {
+					left: 38%;
+					bottom: 4%;
+					transform: scale(0.78) rotate(-7deg);
+				}
+
+				.donation-content-wrap { padding: 50px 0; }
+				.donation-box { padding: 40px 26px; }
+				.donation-content h3 { font-size: 2rem; }
+				.why { padding-top: 90px; padding-bottom: 50px; }
+			}
+
+			/* rispetta la preferenza di movimento ridotto */
+
+			@media (prefers-reduced-motion: reduce) {
+				*, *::before, *::after {
+					animation-duration: 0.001ms !important;
+					animation-iteration-count: 1 !important;
+					transition-duration: 0.001ms !important;
+					scroll-behavior: auto !important;
+				}
+			}
+		</style>
+	</head>
+
+	<body>
+	<header>
+	<div class="nav">
+		<a href="#top" class="brand">
+			<img src="assets/rana-crema.png" alt="" />
+			Bargniff
+		</a>
+	</div>
+	</header>
+
+	<main id="top">
+	<!-- hero -->
+	<section class="hero">
+		<div class="pond" aria-hidden="true">
+			<svg viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
+				<circle class="ripple r1" cx="300" cy="300" r="140" fill="none" stroke="#06754d" stroke-width="2" />
+				<circle class="ripple r2" cx="300" cy="300" r="140" fill="none" stroke="#c8a627" stroke-width="2" />
+				<circle class="ripple r3" cx="300" cy="300" r="140" fill="none" stroke="#17fc96" stroke-width="2" />
+			</svg>
+
+			<img class="hero-frog" src="assets/rana-verde.png" alt="Bargniff, la mascotte rana del progetto" />
+
+			<div class="lily" style="width: 60px; height: 60px; left: 6%; top: 18%"></div>
+			<div class="lily" style="width: 34px; height: 34px; right: 8%; top: 12%"></div>
+			<div class="lily" style="width: 44px; height: 44px; left: 2%; bottom: 14%"></div>
+			<div class="lily" style="width: 26px; height: 26px; right: 4%; bottom: 22%"></div>
+		</div>
+
+		<div class="wrap">
+			<div class="hero-copy reveal in">
+				<h1>
+					pooooooooessssssiaaaa roccosia poeoccosia
+					<span> poesia poesia poesia poeeeeesia rocco </span>
+				</h1>
+			</div>
+		</div>
+	</section>
+
+	<div class="wave wave-down" data-fill="#432f2c" aria-hidden="true"></div>
+
+	<!-- missione: laghetto con le tre ninfee cliccabili -->
+	<section class="mission section-pad" id="missione">
+		<div class="wrap">
+			<div class="mission-info-panel reveal" aria-live="polite">
+				<p class="eyebrow" data-mission-eyebrow>Esplora il laghetto</p>
+				<h2 data-mission-title>Passa sulle ninfee</h2>
+				<p data-mission-copy>Ognuna apre un piccolo testo</p>
+			</div>
+
+			<div class="mission-pond-scene reveal">
+				<div class="bush bush-1" aria-hidden="true"></div>
+				<div class="bush bush-2" aria-hidden="true"></div>
+				<div class="bush bush-3" aria-hidden="true"></div>
+				<div class="bush bush-4" aria-hidden="true"></div>
+				<div class="bush bush-5" aria-hidden="true"></div>
+				<div class="bush bush-6" aria-hidden="true"></div>
+
+				<div class="mission-pond">
+					<div class="pond-ripple ripple-a"></div>
+					<div class="pond-ripple ripple-b"></div>
+
+					<div class="water-lily lily-one">
+						<button
+							type="button"
+							class="lily-trigger"
+							data-eyebrow="Bargnifico"
+							data-title="Storie che fanno acqua"
+							data-copy="Il nostro giornale? fumetto? da decidere con Rocco"
+						>
+							Bargnifico
+						</button>
+					</div>
+
+					<div class="water-lily lily-two">
+						<button
+							type="button"
+							class="lily-trigger"
+							data-eyebrow="Articoli"
+							data-title="Appunti dalla riva"
+							data-copy="Articoli scritti da noi"
+						>
+							Articoli
+						</button>
+					</div>
+
+					<div class="water-lily lily-donation">
+						<button
+							type="button"
+							class="lily-trigger donation-trigger"
+							data-eyebrow="Sostienici"
+							data-title="Dai una mano alle rane"
+							data-copy="Anche un piccolo contributo ci aiuta plz"
+						>
+							Donazione
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<div class="wave wave-up" data-fill="#432f2c" aria-hidden="true"></div>
+
+	<!-- perché le rane -->
+	<section class="why section-pad" id="perche">
+		<div class="wrap">
+			<div class="why-grid">
+				<div class="why-card reveal">
+					<div class="why-icon">
+						<img src="assets/rana-marrone.png" alt="" />
+					</div>
+					<h3>vecchio articolo #1</h3>
+					<p>da decidere se mettiamo articolo qua...</p>
+				</div>
+
+				<div class="why-card reveal">
+					<div class="why-icon">
+						<img src="assets/rana-crema.png" alt="" />
+					</div>
+					<h3>vecchio articolo #2</h3>
+					<p>da decidere se mettiamo articolo qua...</p>
+				</div>
+
+				<div class="why-card reveal">
+					<div class="why-icon">
+						<img src="assets/rana-verde.png" alt="" />
+					</div>
+					<h3>vecchio articolo #3</h3>
+					<p>da decidere se mettiamo articolo qua...</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<div class="wave wave-down donation-wave-top" data-fill="#06754d" aria-hidden="true"></div>
+
+	<!-- donazione -->
+	<section class="donation-section" id="donazione">
+		<div class="donation-content-wrap">
+			<div class="wrap">
+				<div class="donation-box reveal">
+					<div class="donation-content">
+						<h3>Dai una mano alle rane</h3>
+						<p>
+							Da vedere cosa scrivere qua...
+							forse: ""
+						</p>
+					</div>
+					<a href="#" class="donation-button">Donaci</a>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<div class="wave wave-up donation-wave-bottom" data-fill="#06754d" aria-hidden="true"></div>
+	</main>
+
+	<footer>
+	<div class="wrap">
+		<div class="foot-top">
+			<div class="foot-col">
+				<div class="foot-brand">
+					<img src="assets/rana-marrone.png" alt="" />
+					Bargniff
+				</div>
+				<p>EX FFFPavia -> Bargniff</p>
+			</div>
+
+			<div class="foot-col">
+				<h4>Contatti</h4>
+				<ul>
+					<li><a href="mailto:ciao@bargniff.it">ciao@bargniff.it</a></li>
+					<li><a href="#luoghi">Pavia, Lombardia</a></li>
+					<li><a href="#luoghi">Instagram</a></li>
+					<li><a href="#luoghi">Facebook</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	</footer>
+
+	<script>
+	// fa comparire con una dissolvenza gli elementi ".reveal" quando entrano nello schermo
+	const observer = new IntersectionObserver((entries) => {
+		entries.forEach((entry) => {
+			if (entry.isIntersecting) {
+				entry.target.classList.add("in");
+				observer.unobserve(entry.target);
+			}
+		});
+	}, { threshold: 0.15 });
+
+	document.querySelectorAll(".reveal").forEach((element) => observer.observe(element));
+
+	// pannello di testo che cambia contenuto passando sopra le ninfee
+	const missionPanel = document.querySelector(".mission-info-panel");
+
+	if (missionPanel) {
+		const eyebrow = missionPanel.querySelector("[data-mission-eyebrow]");
+		const title = missionPanel.querySelector("[data-mission-title]");
+		const copy = missionPanel.querySelector("[data-mission-copy]");
+
+		const defaultContent = {
+			eyebrow: eyebrow.textContent.trim(),
+			title: title.textContent.trim(),
+			copy: copy.textContent.trim(),
+		};
+
+		function showMission(trigger) {
+			eyebrow.textContent = trigger.dataset.eyebrow;
+			title.textContent = trigger.dataset.title;
+			copy.textContent = trigger.dataset.copy;
+			missionPanel.classList.add("is-active");
+		}
+
+		function resetMission() {
+			eyebrow.textContent = defaultContent.eyebrow;
+			title.textContent = defaultContent.title;
+			copy.textContent = defaultContent.copy;
+			missionPanel.classList.remove("is-active");
+		}
+
+		document.querySelectorAll(".lily-trigger").forEach((trigger) => {
+			trigger.addEventListener("pointerenter", () => showMission(trigger));
+			trigger.addEventListener("focus", () => showMission(trigger));
+
+			trigger.addEventListener("click", () => {
+				showMission(trigger);
+
+				if (trigger.classList.contains("donation-trigger")) {
+					document.querySelector("#donazione").scrollIntoView({ behavior: "smooth", block: "center" });
+				}
+			});
+
+			trigger.addEventListener("pointerleave", () => {
+				if (document.activeElement !== trigger) resetMission();
+			});
+
+			trigger.addEventListener("blur", resetMission);
+		});
+	}
+
+	// ombra sotto l'header quando si scrolla
+	const header = document.querySelector("header");
+
+	window.addEventListener("scroll", () => {
+		header.style.boxShadow = window.scrollY > 12 ? "0 8px 24px -18px rgba(67,47,44,.5)" : "none";
+	});
+
+	// disegna le onde animate tra le sezioni (SVG generato via JS)
+	const WAVE_SETTINGS = {
+		viewBoxHeight: 130,
+		cycles: 1.5,
+		oscillationSpeed: 0.55,
+		travelSpeed: 0.05,
+		down: { center: 60, amplitude: 34 },
+		up: { center: 70, amplitude: 34 },
+		backLayer: { ampScale: 0.55, areaBoost: 14, phase: 2.1, speedScale: 0.6 },
+	};
+
+	const NS = "http://www.w3.org/2000/svg";
+
+	function buildWave(el) {
+		const type = el.classList.contains("wave-up") ? "up" : "down";
+		const fill = el.dataset.fill;
+
+		// larghezza molto superiore alla viewport, così la forma non si taglia durante l'oscillazione
+		const tileWidth = 2880;
+		const width = tileWidth * 2;
+		const height = WAVE_SETTINGS.viewBoxHeight;
+
+		const svg = document.createElementNS(NS, "svg");
+		svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+		svg.setAttribute("preserveAspectRatio", "none");
+
+		const backPath = document.createElementNS(NS, "path");
+		backPath.setAttribute("fill", fill);
+		backPath.classList.add("wave-back-layer");
+
+		const frontPath = document.createElementNS(NS, "path");
+		frontPath.setAttribute("fill", fill);
+
+		svg.append(backPath, frontPath);
+		el.appendChild(svg);
+
+		return { svg, type, tileWidth, width, height, backPath, frontPath };
+	}
+
+	const waves = Array.from(document.querySelectorAll(".wave")).map(buildWave);
+
+	function wavePath(wave, time, isBackLayer) {
+		const { tileWidth, width, height, type } = wave;
+		const shape = WAVE_SETTINGS[type];
+		const layer = isBackLayer ? WAVE_SETTINGS.backLayer : null;
+		const areaSign = type === "up" ? 1 : -1;
+
+		const center = shape.center + (layer ? areaSign * layer.areaBoost : 0);
+		const amplitude = shape.amplitude * (layer ? layer.ampScale : 1);
+		const phase = layer ? layer.phase : 0;
+		const speedScale = layer ? layer.speedScale : 1;
+
+		const travel = time * WAVE_SETTINGS.travelSpeed * speedScale;
+		const speed = WAVE_SETTINGS.oscillationSpeed * speedScale;
+		const points = 320;
+
+		let d = `M 0 ${center}`;
+
+		for (let i = 1; i <= points; i++) {
+			const x = (i / points) * width;
+			const t = (x % tileWidth) / tileWidth;
+			const envelope = Math.sin(Math.PI * t);
+
+			const main = Math.sin(t * Math.PI * WAVE_SETTINGS.cycles * 2 - travel + phase) * Math.cos(time * speed * 0.5);
+			const ripple = Math.sin(t * Math.PI * WAVE_SETTINGS.cycles * 4 - travel * 1.4 + phase + 0.9) * Math.cos(time * speed * 0.7);
+			const y = center + (main + ripple * 0.18) * amplitude * envelope;
+
+			d += ` L ${x} ${y}`;
+		}
+
+		d += type === "up" ? ` L ${width} 0 L 0 0 Z` : ` L ${width} ${height} L 0 ${height} Z`;
+
+		return d;
+	}
+
+	function animateWaves(timestamp) {
+		const time = timestamp / 1000;
+
+		waves.forEach((wave) => {
+			wave.backPath.setAttribute("d", wavePath(wave, time, true));
+			wave.frontPath.setAttribute("d", wavePath(wave, time, false));
+		});
+
+		requestAnimationFrame(animateWaves);
+	}
+
+	requestAnimationFrame(animateWaves);
+	</script>
+	</body>
 </html>
