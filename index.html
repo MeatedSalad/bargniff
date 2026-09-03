@@ -97,8 +97,6 @@
 				padding: 0 32px;
 			}
 
-			/* header */
-
 			header {
 				position: fixed;
 				top: 0;
@@ -133,8 +131,6 @@
 				height: 38px;
 				object-fit: contain;
 			}
-
-			/* hero */
 
 			.hero {
 				position: relative;
@@ -172,7 +168,7 @@
 				color: var(--forest);
 			}
 
-			/* decorazione hero: laghetto con increspature e rana */
+			/* laghetto + rana in hero, valori a occhio */
 
 			.pond {
 				position: absolute;
@@ -233,8 +229,6 @@
 				opacity: 0.35;
 			}
 
-			/* onde tra le sezioni */
-
 			.wave {
 				position: relative;
 				width: 100%;
@@ -278,8 +272,6 @@
 				to { transform: translateX(0); }
 			}
 
-			/* sezioni generiche */
-
 			section {
 				position: relative;
 			}
@@ -287,8 +279,6 @@
 			.section-pad {
 				padding: 30px 0;
 			}
-
-			/* missione */
 
 			.mission {
 				background: var(--brown);
@@ -301,8 +291,6 @@
 				gap: 36px;
 				align-items: center;
 			}
-
-			/* pannello testo missione */
 
 			.mission-info-panel {
 				position: relative;
@@ -359,8 +347,6 @@
 			.mission-info-panel.is-active h2 {
 				color: var(--mint);
 			}
-
-			/* laghetto della missione */
 
 			.mission-pond-scene {
 				position: relative;
@@ -431,8 +417,6 @@
 				to { transform: translateX(8%) translateY(-2%); }
 			}
 
-			/* increspature statiche del laghetto */
-
 			.pond-ripple {
 				position: absolute;
 				border: 2px solid rgba(251, 249, 225, 0.15);
@@ -456,8 +440,6 @@
 				top: 53%;
 				transform: rotate(-8deg);
 			}
-
-			/* cespugli intorno al laghetto */
 
 			.bush {
 				position: absolute;
@@ -494,6 +476,7 @@
 				opacity: 0.85;
 			}
 
+			/* offset a occhio finché sembravano ok intorno al laghetto */
 			.bush-1 { top: -20px; left: -15px; }
 			.bush-2 { top: 10%; left: -25px; transform: scale(0.85); }
 			.bush-3 { bottom: -15px; left: 5%; transform: scale(0.9); }
@@ -501,7 +484,7 @@
 			.bush-5 { top: 15%; right: -30px; transform: scale(0.8); }
 			.bush-6 { bottom: -20px; right: 8%; transform: scale(0.85); }
 
-			/* ninfee del laghetto (le tre voci del menu) */
+			/* le 3 ninfee cliccabili */
 
 			.water-lily {
 				position: absolute;
@@ -586,8 +569,6 @@
 				transform: translateX(-50%) scale(1.1) rotate(0);
 			}
 
-			/* ninfee piccole, solo decorative */
-
 			.mini-lily {
 				width: 76px;
 				height: 64px;
@@ -617,8 +598,6 @@
 			.lily-two:focus-within {
 				transform: scale(1.1) rotate(0);
 			}
-
-			/* perché le rane: le tre card */
 
 			.why {
 				background: var(--cream);
@@ -672,8 +651,6 @@
 				color: rgba(67, 47, 44, 0.75);
 				font-size: 0.98rem;
 			}
-
-			/* sezione donazione (verde) */
 
 			.donation-section {
 				position: relative;
@@ -766,8 +743,6 @@
 				transform: translateY(-3px);
 			}
 
-			/* decorazioni della sezione donazione */
-
 			.donation-section::before {
 				content: "";
 				position: absolute;
@@ -791,8 +766,6 @@
 				background: rgba(200, 166, 39, 0.14);
 				pointer-events: none;
 			}
-
-			/* footer */
 
 			footer {
 				padding: 90px 0 40px;
@@ -841,8 +814,6 @@
 				color: var(--forest);
 			}
 
-			/* animazione di comparsa allo scroll */
-
 			.reveal {
 				opacity: 0;
 				transform: translateY(24px);
@@ -853,8 +824,6 @@
 				opacity: 1;
 				transform: translateY(0);
 			}
-
-			/* responsive */
 
 			@media (max-width: 920px) {
 				.mission .wrap { grid-template-columns: 1fr; }
@@ -895,8 +864,6 @@
 				.why { padding-top: 90px; padding-bottom: 50px; }
 			}
 
-			/* rispetta la preferenza di movimento ridotto */
-
 			@media (prefers-reduced-motion: reduce) {
 				*, *::before, *::after {
 					animation-duration: 0.001ms !important;
@@ -919,7 +886,6 @@
 	</header>
 
 	<main id="top">
-	<!-- hero -->
 	<section class="hero">
 		<div class="pond" aria-hidden="true">
 			<svg viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
@@ -948,7 +914,7 @@
 
 	<div class="wave wave-down" data-fill="#432f2c" aria-hidden="true"></div>
 
-	<!-- missione: laghetto con le tre ninfee cliccabili -->
+	<!-- 3 ninfee cliccabili nel laghetto -->
 	<section class="mission section-pad" id="missione">
 		<div class="wrap">
 			<div class="mission-info-panel reveal" aria-live="polite">
@@ -1011,7 +977,6 @@
 
 	<div class="wave wave-up" data-fill="#432f2c" aria-hidden="true"></div>
 
-	<!-- perché le rane -->
 	<section class="why section-pad" id="perche">
 		<div class="wrap">
 			<div class="why-grid">
@@ -1090,7 +1055,7 @@
 	</footer>
 
 	<script>
-	// fa comparire con una dissolvenza gli elementi ".reveal" quando entrano nello schermo
+	// reveal degli elementi quando entrano in viewport
 	const observer = new IntersectionObserver((entries) => {
 		entries.forEach((entry) => {
 			if (entry.isIntersecting) {
@@ -1102,7 +1067,7 @@
 
 	document.querySelectorAll(".reveal").forEach((element) => observer.observe(element));
 
-	// pannello di testo che cambia contenuto passando sopra le ninfee
+	// hover sulle ninfee -> cambia il testo nel pannello
 	const missionPanel = document.querySelector(".mission-info-panel");
 
 	if (missionPanel) {
@@ -1150,14 +1115,15 @@
 		});
 	}
 
-	// ombra sotto l'header quando si scrolla
+	// shadow sull'header dopo un po' di scroll
 	const header = document.querySelector("header");
 
 	window.addEventListener("scroll", () => {
 		header.style.boxShadow = window.scrollY > 12 ? "0 8px 24px -18px rgba(67,47,44,.5)" : "none";
 	});
 
-	// disegna le onde animate tra le sezioni (SVG generato via JS)
+	// onde animate tra le sezioni, path ricalcolato ad ogni frame
+	// (i numeri qui sotto sono a occhio, ritoccare con calma se serve)
 	const WAVE_SETTINGS = {
 		viewBoxHeight: 130,
 		cycles: 1.5,
@@ -1174,7 +1140,7 @@
 		const type = el.classList.contains("wave-up") ? "up" : "down";
 		const fill = el.dataset.fill;
 
-		// larghezza molto superiore alla viewport, così la forma non si taglia durante l'oscillazione
+		// più larga della viewport, sennò si vede tagliata quando oscilla
 		const tileWidth = 2880;
 		const width = tileWidth * 2;
 		const height = WAVE_SETTINGS.viewBoxHeight;
