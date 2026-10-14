@@ -1,0 +1,64 @@
+﻿<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bargniff Admin</title>
+  <style>
+    li { margin-bottom: 8px; word-break: break-all; }
+    li button { margin-left: 8px; padding: 2px 10px; }
+  </style>
+</head>
+<body style="font-family: sans-serif; max-width: 520px; margin: 40px auto;">
+  <h1>Admin Bargniff</h1>
+
+  <input id="url" placeholder="Incolla il link di Instagram" style="width:100%; padding:8px;" />
+  <button onclick="send()" style="margin-top:8px; padding:8px 16px;">Aggiungi</button>
+
+  <h3>Post attuali</h3>
+  <ol id="list"></ol>
+
+  <script>
+    async function load() {
+      const posts = await (await fetch("/api/instagram")).json();
+      const list = document.getElementById("list");
+      list.innerHTML = "";
+
+      posts.forEach((u) => {
+        const li = document.createElement("li");
+        li.append(u);
+
+        const btn = document.createElement("button");
+        btn.textContent = "Rimuovi";
+        btn.onclick = () => remove(u);
+        li.append(btn);
+
+        list.append(li);
+      });
+    }
+
+    async function send() {
+      const url = document.getElementById("url").value.trim();
+      const r = await fetch("/api/admin/instagram", {
+        method: "POST",
+        body: JSON.stringify({ url }),
+      });
+      if (r.ok) document.getElementById("url").value = "";
+      else alert(await r.text());
+      load();
+    }
+
+    async function remove(url) {
+      if (!confirm("Rimuovere questo post?")) return;
+      const r = await fetch("/api/admin/instagram", {
+        method: "DELETE",
+        body: JSON.stringify({ url }),
+      });
+      if (!r.ok) alert(await r.text());
+      load();
+    }
+
+    load();
+  </script>
+</body>
+</html>

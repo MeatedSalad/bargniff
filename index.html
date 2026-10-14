@@ -14,10 +14,6 @@
 			rel="stylesheet"
 		/>
 
-		<!-- Cloudflare Web Analytics -->
-		<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "4857cab5bf194089bfcb8725e9d78862"}'></script>
-		<!-- End Cloudflare Web Analytics -->
-
 		<style>
 			@font-face {
 				font-family: "Les Flos Sage";
@@ -52,6 +48,11 @@
 
 			html {
 				scroll-behavior: smooth;
+				/* evita il bordo bianco ai lati su mobile quando si fa pinch-zoom / overscroll:
+				   senza questo, lo sfondo di <html> resta bianco (default del browser) mentre
+				   <body> ha lo sfondo crema, e la differenza si vede ai bordi quando si zooma */
+				background: var(--cream);
+				height: 100%;
 			}
 
 			body {
@@ -60,6 +61,8 @@
 				font-family: "Raleway", sans-serif;
 				line-height: 1.6;
 				overflow-x: hidden;
+				min-height: 100%;
+				width: 100%;
 				-webkit-font-smoothing: antialiased;
 			}
 
@@ -101,6 +104,8 @@
 				padding: 0 32px;
 			}
 
+			/* header */
+
 			header {
 				position: fixed;
 				top: 0;
@@ -127,6 +132,7 @@
 				gap: 10px;
 				font-family: "Les Flos Sage", sans-serif;
 				font-size: 1.5rem;
+				font-weight: 700;
 				color: var(--cream);
 			}
 
@@ -135,6 +141,8 @@
 				height: 38px;
 				object-fit: contain;
 			}
+
+			/* hero */
 
 			.hero {
 				position: relative;
@@ -172,7 +180,7 @@
 				color: var(--forest);
 			}
 
-			/* laghetto + rana in hero, valori a occhio */
+			/* decorazione hero: laghetto con increspature e rana */
 
 			.pond {
 				position: absolute;
@@ -233,6 +241,8 @@
 				opacity: 0.35;
 			}
 
+			/* onde tra le sezioni */
+
 			.wave {
 				position: relative;
 				width: 100%;
@@ -276,6 +286,8 @@
 				to { transform: translateX(0); }
 			}
 
+			/* sezioni generiche */
+
 			section {
 				position: relative;
 			}
@@ -283,6 +295,8 @@
 			.section-pad {
 				padding: 30px 0;
 			}
+
+			/* missione */
 
 			.mission {
 				background: var(--brown);
@@ -295,6 +309,8 @@
 				gap: 36px;
 				align-items: center;
 			}
+
+			/* pannello testo missione */
 
 			.mission-info-panel {
 				position: relative;
@@ -351,6 +367,8 @@
 			.mission-info-panel.is-active h2 {
 				color: var(--mint);
 			}
+
+			/* laghetto della missione */
 
 			.mission-pond-scene {
 				position: relative;
@@ -421,6 +439,8 @@
 				to { transform: translateX(8%) translateY(-2%); }
 			}
 
+			/* increspature statiche del laghetto */
+
 			.pond-ripple {
 				position: absolute;
 				border: 2px solid rgba(251, 249, 225, 0.15);
@@ -444,6 +464,8 @@
 				top: 53%;
 				transform: rotate(-8deg);
 			}
+
+			/* cespugli intorno al laghetto */
 
 			.bush {
 				position: absolute;
@@ -480,7 +502,6 @@
 				opacity: 0.85;
 			}
 
-			/* offset a occhio finché sembravano ok intorno al laghetto */
 			.bush-1 { top: -20px; left: -15px; }
 			.bush-2 { top: 10%; left: -25px; transform: scale(0.85); }
 			.bush-3 { bottom: -15px; left: 5%; transform: scale(0.9); }
@@ -488,7 +509,7 @@
 			.bush-5 { top: 15%; right: -30px; transform: scale(0.8); }
 			.bush-6 { bottom: -20px; right: 8%; transform: scale(0.85); }
 
-			/* le 3 ninfee cliccabili */
+			/* ninfee del laghetto (le tre voci del menu) */
 
 			.water-lily {
 				position: absolute;
@@ -573,6 +594,8 @@
 				transform: translateX(-50%) scale(1.1) rotate(0);
 			}
 
+			/* ninfee piccole, solo decorative */
+
 			.mini-lily {
 				width: 76px;
 				height: 64px;
@@ -602,6 +625,51 @@
 			.lily-two:focus-within {
 				transform: scale(1.1) rotate(0);
 			}
+
+			/* leggenda del Bargniff */
+
+			.legend {
+				background: var(--cream);
+				padding-bottom: 40px;
+			}
+
+			.legend-wrap {
+				max-width: 760px;
+			}
+
+			.legend-eyebrow {
+				margin-bottom: 18px;
+				color: var(--forest);
+				font-family: "Caveat", cursive;
+				font-size: 1.5rem;
+				font-weight: 700;
+				text-align: center;
+			}
+
+			.legend-text p {
+				margin-bottom: 20px;
+				color: rgba(67, 47, 44, 0.85);
+				font-size: 1.08rem;
+				line-height: 1.75;
+			}
+
+			.legend-text p:last-child {
+				margin-bottom: 0;
+				color: var(--forest);
+				font-weight: 600;
+			}
+
+			.legend-text p:first-child::first-letter {
+				margin-right: 2px;
+				float: left;
+				color: var(--forest);
+				font-family: "Fredoka", sans-serif;
+				font-size: 3.4rem;
+				font-weight: 700;
+				line-height: 0.85;
+			}
+
+			/* perché le rane: le tre card */
 
 			.why {
 				background: var(--cream);
@@ -655,6 +723,8 @@
 				color: rgba(67, 47, 44, 0.75);
 				font-size: 0.98rem;
 			}
+
+			/* sezione donazione (verde) */
 
 			.donation-section {
 				position: relative;
@@ -747,6 +817,8 @@
 				transform: translateY(-3px);
 			}
 
+			/* decorazioni della sezione donazione */
+
 			.donation-section::before {
 				content: "";
 				position: absolute;
@@ -770,6 +842,8 @@
 				background: rgba(200, 166, 39, 0.14);
 				pointer-events: none;
 			}
+
+			/* footer */
 
 			footer {
 				padding: 90px 0 40px;
@@ -818,6 +892,8 @@
 				color: var(--forest);
 			}
 
+			/* animazione di comparsa allo scroll */
+
 			.reveal {
 				opacity: 0;
 				transform: translateY(24px);
@@ -828,6 +904,47 @@
 				opacity: 1;
 				transform: translateY(0);
 			}
+
+			/* instagram */
+
+			.insta {
+				background: var(--cream);
+				padding-bottom: 70px;
+			}
+
+			.insta-title {
+				margin-bottom: 30px;
+				color: var(--forest);
+				font-size: clamp(1.8rem, 3vw, 2.4rem);
+				text-align: center;
+			}
+
+			.insta-grid {
+				display: grid;
+				grid-template-columns: repeat(3, 1fr);
+				gap: 24px;
+				align-items: start;
+			}
+
+			.insta-grid .instagram-media {
+				width: 100% !important;
+				min-width: 0 !important;
+				max-width: 100% !important;
+				margin: 0 !important;
+			}
+
+			.insta-follow {
+				margin-top: 28px;
+				color: var(--forest);
+				font-weight: 600;
+				text-align: center;
+			}
+
+			@media (max-width: 920px) {
+				.insta-grid { grid-template-columns: 1fr; }
+			}
+
+			/* responsive */
 
 			@media (max-width: 920px) {
 				.mission .wrap { grid-template-columns: 1fr; }
@@ -866,7 +983,11 @@
 				.donation-box { padding: 40px 26px; }
 				.donation-content h3 { font-size: 2rem; }
 				.why { padding-top: 90px; padding-bottom: 50px; }
+				.legend-text p { font-size: 1rem; }
+				.legend-text p:first-child::first-letter { font-size: 2.6rem; }
 			}
+
+			/* rispetta la preferenza di movimento ridotto */
 
 			@media (prefers-reduced-motion: reduce) {
 				*, *::before, *::after {
@@ -890,6 +1011,7 @@
 	</header>
 
 	<main id="top">
+	<!-- hero -->
 	<section class="hero">
 		<div class="pond" aria-hidden="true">
 			<svg viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
@@ -909,16 +1031,51 @@
 		<div class="wrap">
 			<div class="hero-copy reveal in">
 				<h1>
-					pooooooooessssssiaaaa roccosia poeoccosia
-					<span> poesia poesia poesia poeeeeesia rocco </span>
+					Rocco plz
+					<span>dacci la tua poesia!</span>
 				</h1>
+			</div>
+		</div>
+	</section>
+
+	<!-- la leggenda del Bargniff -->
+	<section class="legend section-pad" id="leggenda">
+		<div class="wrap legend-wrap">
+			<p class="legend-eyebrow reveal">🐸</p>
+
+			<div class="legend-text reveal">
+				<p>
+					Il Bargniff è un intrigante mostro del folklore pavese, un gigantesco rospo degli
+					acquitrini che, come una temibile Sfinge, pone domande ai viandanti che solo a una
+					giusta risposta permetterà loro di proseguire il cammino.
+				</p>
+
+				<p>
+					Il nostro Bargniff però non pone più indovinelli per affogarci chi si affanna accanto
+					a un acquitrino: fa domande perché ha bisogno di risposte. Le sue domande sono le
+					stesse che ci tormentano nelle nostre case, nelle nostre città, nelle nostre vite
+					quotidiane: prima o poi pioverà troppo o troppo poco, ci saranno troppo vento o
+					troppo sole... Il Bargniff allora crescerà ancora, e il peso delle sue domande — come
+					"Che mondo vogliamo?" — ci farà sprofondare.
+				</p>
+
+				<p>
+					Il nostro Creativo nasce proprio dalla necessità di rispondere a queste domande,
+					portando un'ondata di impegno creativo per giungere alla soluzione.
+				</p>
+
+				<p>
+					Il Bargniff oggi ritorna ponendoci uno dei quesiti più importanti e allo stesso tempo
+					più complicati che l'umanità intera si trova ad affrontare: come potremo vivere in
+					futuro, se stiamo distruggendo il nostro pianeta e la nostra casa?
+				</p>
 			</div>
 		</div>
 	</section>
 
 	<div class="wave wave-down" data-fill="#432f2c" aria-hidden="true"></div>
 
-	<!-- 3 ninfee cliccabili nel laghetto -->
+	<!-- missione: laghetto con le tre ninfee cliccabili -->
 	<section class="mission section-pad" id="missione">
 		<div class="wrap">
 			<div class="mission-info-panel reveal" aria-live="polite">
@@ -981,6 +1138,7 @@
 
 	<div class="wave wave-up" data-fill="#432f2c" aria-hidden="true"></div>
 
+	<!-- perché le rane -->
 	<section class="why section-pad" id="perche">
 		<div class="wrap">
 			<div class="why-grid">
@@ -1011,6 +1169,17 @@
 		</div>
 	</section>
 
+	<!-- instagram -->
+	<section class="insta" id="instagram">
+		<div class="wrap">
+			<h2 class="insta-title">Dal nostro Instagram</h2>
+			<div class="insta-grid" id="insta-grid"></div>
+			<p class="insta-follow">
+				<a href="https://www.instagram.com/bargniff.pavia" target="_blank" rel="noopener noreferrer">Seguici su Instagram →</a>
+			</p>
+		</div>
+	</section>
+
 	<div class="wave wave-down donation-wave-top" data-fill="#06754d" aria-hidden="true"></div>
 
 	<!-- donazione -->
@@ -1021,11 +1190,18 @@
 					<div class="donation-content">
 						<h3>Dai una mano alle rane</h3>
 						<p>
-							Da vedere cosa scrivere qua...
-							forse: ""
+							Ogni contributo, piccolo o grande, ci aiuta a far crescere Bargniff.
+							Puoi donare in modo sicuro tramite la nostra pagina su Open Collective.
 						</p>
 					</div>
-					<a href="#" class="donation-button">Donaci</a>
+					<a
+						href="https://opencollective.com/creativo-bargniff"
+						class="donation-button"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						Donaci
+					</a>
 				</div>
 			</div>
 		</div>
@@ -1049,9 +1225,12 @@
 				<h4>Contatti</h4>
 				<ul>
 					<li><a href="mailto:ciao@bargniff.it">ciao@bargniff.it</a></li>
+					<li><a href="mailto:bargniff.pavia@proton.me">bargniff.pavia@proton.me</a></li>
 					<li><a href="#luoghi">Pavia, Lombardia</a></li>
-					<li><a href="#luoghi">Instagram</a></li>
-					<li><a href="#luoghi">Facebook</a></li>
+					<li><a href="https://www.instagram.com/bargniff.pavia" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+					<li><a href="https://www.facebook.com/share/19WugfELYb/" target="_blank" rel="noopener noreferrer">Facebook</a></li>
+					<li><a href="https://www.tiktok.com/@bargniff.pavia" target="_blank" rel="noopener noreferrer">TikTok</a></li>
+					<li><a href="https://chat.whatsapp.com/KY21HeIzXCrIF0GukNIXD5" target="_blank" rel="noopener noreferrer">WhatsApp</a></li>
 				</ul>
 			</div>
 		</div>
@@ -1059,7 +1238,7 @@
 	</footer>
 
 	<script>
-	// reveal degli elementi quando entrano in viewport
+	// fa comparire con una dissolvenza gli elementi ".reveal" quando entrano nello schermo
 	const observer = new IntersectionObserver((entries) => {
 		entries.forEach((entry) => {
 			if (entry.isIntersecting) {
@@ -1071,7 +1250,7 @@
 
 	document.querySelectorAll(".reveal").forEach((element) => observer.observe(element));
 
-	// hover sulle ninfee -> cambia il testo nel pannello
+	// pannello di testo che cambia contenuto passando sopra le ninfee
 	const missionPanel = document.querySelector(".mission-info-panel");
 
 	if (missionPanel) {
@@ -1119,15 +1298,14 @@
 		});
 	}
 
-	// shadow sull'header dopo un po' di scroll
+	// ombra sotto l'header quando si scrolla
 	const header = document.querySelector("header");
 
 	window.addEventListener("scroll", () => {
 		header.style.boxShadow = window.scrollY > 12 ? "0 8px 24px -18px rgba(67,47,44,.5)" : "none";
 	});
 
-	// onde animate tra le sezioni, path ricalcolato ad ogni frame
-	// (i numeri qui sotto sono a occhio, ritoccare con calma se serve)
+	// disegna le onde animate tra le sezioni (SVG generato via JS)
 	const WAVE_SETTINGS = {
 		viewBoxHeight: 130,
 		cycles: 1.5,
@@ -1144,7 +1322,7 @@
 		const type = el.classList.contains("wave-up") ? "up" : "down";
 		const fill = el.dataset.fill;
 
-		// più larga della viewport, sennò si vede tagliata quando oscilla
+		// larghezza molto superiore alla viewport, così la forma non si taglia durante l'oscillazione
 		const tileWidth = 2880;
 		const width = tileWidth * 2;
 		const height = WAVE_SETTINGS.viewBoxHeight;
@@ -1214,6 +1392,30 @@
 	}
 
 	requestAnimationFrame(animateWaves);
+
+	// mostra gli ultimi 3 post di Instagram (lista gestita da /admin)
+	async function loadInstagram() {
+		const section = document.querySelector("#instagram");
+		const grid = document.querySelector("#insta-grid");
+
+		try {
+			const posts = await (await fetch("/api/instagram")).json();
+			if (!posts.length) { section.hidden = true; return; }
+
+			grid.innerHTML = posts
+				.map((u) => `<blockquote class="instagram-media" data-instgrm-permalink="${u}" data-instgrm-version="14"></blockquote>`)
+				.join("");
+
+			const s = document.createElement("script");
+			s.async = true;
+			s.src = "https://www.instagram.com/embed.js";
+			document.body.appendChild(s);
+		} catch {
+			section.hidden = true;
+		}
+	}
+
+	loadInstagram();
 	</script>
 	</body>
 </html>
