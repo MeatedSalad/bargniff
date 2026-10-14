@@ -921,16 +921,14 @@
 
 			.insta-grid {
 				display: grid;
-				grid-template-columns: repeat(3, 1fr);
+				grid-template-columns: repeat(auto-fit, minmax(min(326px, 100%), 1fr));
 				gap: 24px;
 				align-items: start;
+				justify-items: center;
 			}
 
 			.insta-grid .instagram-media {
-				width: 100% !important;
-				min-width: 0 !important;
-				max-width: 100% !important;
-				margin: 0 !important;
+				margin: 0 auto !important;
 			}
 
 			.insta-follow {
@@ -938,10 +936,6 @@
 				color: var(--forest);
 				font-weight: 600;
 				text-align: center;
-			}
-
-			@media (max-width: 920px) {
-				.insta-grid { grid-template-columns: 1fr; }
 			}
 
 			/* responsive */
@@ -1359,7 +1353,7 @@
 
 		const travel = time * WAVE_SETTINGS.travelSpeed * speedScale;
 		const speed = WAVE_SETTINGS.oscillationSpeed * speedScale;
-		const points = 320;
+		const points = 160;
 
 		let d = `M 0 ${center}`;
 
@@ -1380,15 +1374,45 @@
 		return d;
 	}
 
-	function animateWaves(timestamp) {
-		const time = timestamp / 1000;
+	function drawWave(wave, time) {
+		wave.backPath.setAttribute("d", wavePath(wave, time, true));
+		wave.frontPath.setAttribute("d", wavePath(wave, time, false));
+	}
 
-		waves.forEach((wave) => {
-			wave.backPath.setAttribute("d", wavePath(wave, time, true));
-			wave.frontPath.setAttribute("d", wavePath(wave, time, false));
+	// disegna una volta sola la forma iniziale
+	waves.forEach((wave) => drawWave(wave, 0));
+
+	// anima solo le onde visibili, a 30 fps, e si ferma mentre si usa il feed Instagram
+	// (altrimenti il JS delle onde ruba tempo al browser e i caroselli degli embed scattano)
+	const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+	const visibleWaves = new Set();
+	let wavesPaused = false;
+	let lastFrame = 0;
+
+	const waveByElement = new Map(waves.map((wave) => [wave.svg.parentElement, wave]));
+	const waveObserver = new IntersectionObserver((entries) => {
+		entries.forEach((entry) => {
+			const wave = waveByElement.get(entry.target);
+			if (entry.isIntersecting) visibleWaves.add(wave);
+			else visibleWaves.delete(wave);
 		});
+	});
+	waveByElement.forEach((wave, element) => waveObserver.observe(element));
 
+	const instaSection = document.querySelector("#instagram");
+	if (instaSection) {
+		instaSection.addEventListener("pointerenter", () => { wavesPaused = true; });
+		instaSection.addEventListener("pointerleave", () => { wavesPaused = false; });
+	}
+
+	function animateWaves(timestamp) {
 		requestAnimationFrame(animateWaves);
+
+		if (reduceMotion || wavesPaused || timestamp - lastFrame < 33) return;
+		lastFrame = timestamp;
+
+		const time = timestamp / 1000;
+		visibleWaves.forEach((wave) => drawWave(wave, time));
 	}
 
 	requestAnimationFrame(animateWaves);
@@ -1402,9 +1426,15 @@
 			const posts = await (await fetch("/api/instagram")).json();
 			if (!posts.length) { section.hidden = true; return; }
 
-			grid.innerHTML = posts
-				.map((u) => `<blockquote class="instagram-media" data-instgrm-permalink="${u}" data-instgrm-version="14"></blockquote>`)
-				.join("");
+			grid.replaceChildren(
+				...posts.map((u) => {
+					const quote = document.createElement("blockquote");
+					quote.className = "instagram-media";
+					quote.setAttribute("data-instgrm-permalink", u);
+					quote.setAttribute("data-instgrm-version", "14");
+					return quote;
+				})
+			);
 
 			const s = document.createElement("script");
 			s.async = true;
