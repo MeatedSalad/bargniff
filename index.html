@@ -2,7 +2,7 @@
 <html lang="it">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0" />
 
 		<title>Bargniff</title>
 
@@ -290,6 +290,13 @@
 
 			section {
 				position: relative;
+			}
+
+			/* le decorazioni che sporgono (cespugli, ninfee) vengono tagliate invece di allargare la pagina */
+			main,
+			footer {
+				overflow-x: hidden;
+				overflow-x: clip;
 			}
 
 			.section-pad {
@@ -927,8 +934,105 @@
 				justify-items: center;
 			}
 
+			.insta-card {
+				position: relative;
+				width: 100%;
+				max-width: 540px;
+			}
+
+			.insta-card.is-loading {
+				min-height: 520px;
+			}
+
 			.insta-grid .instagram-media {
 				margin: 0 auto !important;
+			}
+
+			@media (max-width: 420px) {
+				.insta-grid .instagram-media {
+					min-width: 0 !important;
+					max-width: 100% !important;
+				}
+			}
+
+			/* box di caricamento mostrato finché il post non è pronto */
+
+			.insta-skel {
+				position: absolute;
+				inset: 0;
+				display: flex;
+				flex-direction: column;
+				gap: 14px;
+				padding: 16px;
+				overflow: hidden;
+				background: #fff;
+				border: 1px solid rgba(67, 47, 44, 0.12);
+				border-radius: 14px;
+				box-shadow: var(--shadow);
+			}
+
+			.insta-card:not(.is-loading) .insta-skel {
+				display: none;
+			}
+
+			.insta-skel i {
+				display: block;
+				height: 12px;
+				border-radius: 6px;
+				background: linear-gradient(90deg, #efe8c8 25%, #f8f3da 50%, #efe8c8 75%);
+				background-size: 200% 100%;
+				animation: instaShimmer 1.4s linear infinite;
+			}
+
+			.insta-skel-head {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+			}
+
+			.insta-skel-head > i {
+				width: 42px;
+				height: 42px;
+				flex: none;
+				border-radius: 50%;
+			}
+
+			.insta-skel-head > div {
+				flex: 1;
+				display: flex;
+				flex-direction: column;
+				gap: 8px;
+			}
+
+			.insta-skel-head > div i:first-child { width: 55%; }
+			.insta-skel-head > div i:last-child { width: 35%; }
+
+			.insta-skel .insta-skel-media {
+				flex: 1;
+				height: auto;
+				min-height: 220px;
+				border-radius: 10px;
+			}
+
+			.insta-skel i:last-child { width: 70%; }
+
+			@keyframes instaShimmer {
+				from { background-position: 200% 0; }
+				to { background-position: -200% 0; }
+			}
+
+			.insta-fallback {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				min-height: 120px;
+				padding: 20px;
+				background: #fff8e6;
+				border: 1px solid rgba(67, 47, 44, 0.12);
+				border-radius: 14px;
+				color: var(--forest);
+				font-weight: 600;
+				text-align: center;
 			}
 
 			.insta-follow {
@@ -962,7 +1066,17 @@
 				}
 
 				.wave { height: 90px; }
-				.mission-pond-scene { width: 112%; max-width: 650px; }
+				/* laghetto un po' più largo della colonna, ma centrato (sporgeva solo a destra) */
+				.mission-pond-scene {
+					width: calc(100% + 36px);
+					max-width: 650px;
+					margin-left: max(-18px, calc((100% - 650px) / 2));
+				}
+
+				.bush-1 { left: -6px; }
+				.bush-2 { left: -12px; }
+				.bush-4 { right: -8px; }
+				.bush-5 { right: -14px; }
 				.mission-pond { aspect-ratio: 1.25/1; }
 				.water-lily { width: 105px; height: 88px; }
 				.water-lily button { padding: 0 17px; font-size: 0.85rem; }
@@ -1164,10 +1278,10 @@
 	</section>
 
 	<!-- instagram -->
-	<section class="insta" id="instagram">
+	<section class="insta" id="instagram" hidden>
 		<div class="wrap">
 			<h2 class="insta-title">Dal nostro Instagram</h2>
-			<div class="insta-grid" id="insta-grid"></div>
+			<div class="insta-grid" id="insta-grid" aria-live="polite"></div>
 			<p class="insta-follow">
 				<a href="https://www.instagram.com/bargniff.pavia" target="_blank" rel="noopener noreferrer">Seguici su Instagram →</a>
 			</p>
@@ -1220,7 +1334,7 @@
 				<ul>
 					<li><a href="mailto:ciao@bargniff.it">ciao@bargniff.it</a></li>
 					<li><a href="mailto:bargniff.pavia@proton.me">bargniff.pavia@proton.me</a></li>
-					<li><a href="#luoghi">Pavia, Lombardia</a></li>
+					<li>Pavia, Lombardia</li>
 					<li><a href="https://www.instagram.com/bargniff.pavia" target="_blank" rel="noopener noreferrer">Instagram</a></li>
 					<li><a href="https://www.facebook.com/share/19WugfELYb/" target="_blank" rel="noopener noreferrer">Facebook</a></li>
 					<li><a href="https://www.tiktok.com/@bargniff.pavia" target="_blank" rel="noopener noreferrer">TikTok</a></li>
@@ -1243,6 +1357,144 @@
 	}, { threshold: 0.15 });
 
 	document.querySelectorAll(".reveal").forEach((element) => observer.observe(element));
+
+	// feed Instagram: scheletro di caricamento, cache locale e fallback (lista gestita da /admin)
+	const INSTA_URL = /^https:\/\/(www\.)?instagram\.com\/(p|reel)\/[\w-]+\/?(\?[\w=&%.-]*)?$/;
+	const INSTA_CACHE_KEY = "bargniff:instagram";
+	const igSection = document.querySelector("#instagram");
+	const igGrid = document.querySelector("#insta-grid");
+	let igScriptState = "idle"; // idle | loading | ready | failed
+	let igCurrent = "";
+
+	function igCacheGet() {
+		try {
+			const list = JSON.parse(localStorage.getItem(INSTA_CACHE_KEY));
+			return Array.isArray(list) ? list.filter((u) => INSTA_URL.test(u)).slice(0, 3) : [];
+		} catch {
+			return [];
+		}
+	}
+
+	function igCacheSet(list) {
+		try { localStorage.setItem(INSTA_CACHE_KEY, JSON.stringify(list)); } catch {}
+	}
+
+	function igLoadScript() {
+		if (igScriptState !== "idle") return;
+		igScriptState = "loading";
+
+		const script = document.createElement("script");
+		script.async = true;
+		script.src = "https://www.instagram.com/embed.js";
+		script.onload = () => { igScriptState = "ready"; };
+		script.onerror = () => {
+			igScriptState = "failed";
+			igGrid.querySelectorAll(".insta-card.is-loading").forEach(igFallback);
+		};
+		document.head.appendChild(script);
+	}
+
+	// se l'embed non parte (blocco contenuti, rete lenta) resta almeno il link al post
+	function igFallback(card) {
+		const link = document.createElement("a");
+		link.className = "insta-fallback";
+		link.href = card.dataset.url;
+		link.target = "_blank";
+		link.rel = "noopener noreferrer";
+		link.textContent = "Guarda il post su Instagram →";
+
+		card.classList.remove("is-loading");
+		card.replaceChildren(link);
+	}
+
+	function igWatch(card) {
+		const finish = () => {
+			observer.disconnect();
+			clearTimeout(timer);
+			card.classList.remove("is-loading");
+			if (!igGrid.querySelector(".is-loading")) igGrid.removeAttribute("aria-busy");
+		};
+
+		const observer = new MutationObserver(() => {
+			const frame = card.querySelector("iframe");
+			if (!frame) return;
+
+			if (frame.classList.contains("instagram-media-rendered")) finish();
+			else if (!frame.dataset.watched) {
+				frame.dataset.watched = "1";
+				frame.addEventListener("load", finish, { once: true });
+			}
+		});
+
+		observer.observe(card, { childList: true, subtree: true, attributes: true, attributeFilter: ["class"] });
+
+		const timer = setTimeout(() => {
+			if (card.querySelector("iframe")) finish();
+			else { observer.disconnect(); igFallback(card); }
+		}, 15000);
+	}
+
+	function igCard(url) {
+		const card = document.createElement("div");
+		card.className = "insta-card is-loading";
+		card.dataset.url = url;
+
+		const skeleton = document.createElement("div");
+		skeleton.className = "insta-skel";
+		skeleton.setAttribute("aria-hidden", "true");
+		skeleton.innerHTML = '<div class="insta-skel-head"><i></i><div><i></i><i></i></div></div><i class="insta-skel-media"></i><i></i><i></i>';
+
+		const quote = document.createElement("blockquote");
+		quote.className = "instagram-media";
+		quote.setAttribute("data-instgrm-permalink", url);
+		quote.setAttribute("data-instgrm-version", "14");
+
+		card.append(skeleton, quote);
+		igWatch(card);
+		return card;
+	}
+
+	function igRender(list) {
+		const key = JSON.stringify(list);
+		if (key === igCurrent) return;
+		igCurrent = key;
+
+		// nessun post: la sezione resta nascosta e non occupa spazio
+		if (!list.length) {
+			igSection.hidden = true;
+			igGrid.replaceChildren();
+			return;
+		}
+
+		igSection.hidden = false;
+		igGrid.setAttribute("aria-busy", "true");
+		igGrid.replaceChildren(...list.map(igCard));
+
+		igLoadScript();
+		if (igScriptState === "ready" && window.instgrm) window.instgrm.Embeds.process();
+	}
+
+	async function loadInstagram() {
+		// mostra subito i post dell'ultima visita, poi aggiorna con la lista fresca
+		const cached = igCacheGet();
+		if (cached.length) igRender(cached);
+
+		try {
+			const response = await fetch("/api/instagram", { cache: "no-cache" });
+			if (!response.ok) throw new Error("bad response");
+
+			const fresh = (await response.json())
+				.filter((u) => typeof u === "string" && INSTA_URL.test(u))
+				.slice(0, 3);
+
+			igCacheSet(fresh);
+			igRender(fresh);
+		} catch {
+			if (!cached.length) igRender([]);
+		}
+	}
+
+	loadInstagram();
 
 	// pannello di testo che cambia contenuto passando sopra le ninfee
 	const missionPanel = document.querySelector(".mission-info-panel");
@@ -1297,7 +1549,7 @@
 
 	window.addEventListener("scroll", () => {
 		header.style.boxShadow = window.scrollY > 12 ? "0 8px 24px -18px rgba(67,47,44,.5)" : "none";
-	});
+	}, { passive: true });
 
 	// disegna le onde animate tra le sezioni (SVG generato via JS)
 	const WAVE_SETTINGS = {
@@ -1416,36 +1668,6 @@
 	}
 
 	requestAnimationFrame(animateWaves);
-
-	// mostra gli ultimi 3 post di Instagram (lista gestita da /admin)
-	async function loadInstagram() {
-		const section = document.querySelector("#instagram");
-		const grid = document.querySelector("#insta-grid");
-
-		try {
-			const posts = await (await fetch("/api/instagram")).json();
-			if (!posts.length) { section.hidden = true; return; }
-
-			grid.replaceChildren(
-				...posts.map((u) => {
-					const quote = document.createElement("blockquote");
-					quote.className = "instagram-media";
-					quote.setAttribute("data-instgrm-permalink", u);
-					quote.setAttribute("data-instgrm-version", "14");
-					return quote;
-				})
-			);
-
-			const s = document.createElement("script");
-			s.async = true;
-			s.src = "https://www.instagram.com/embed.js";
-			document.body.appendChild(s);
-		} catch {
-			section.hidden = true;
-		}
-	}
-
-	loadInstagram();
 	</script>
 	</body>
 </html>
