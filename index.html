@@ -4,6 +4,30 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0" />
 
+		<script>
+			// avvio anticipato del feed Instagram: parte subito, senza aspettare CSS e font
+			(function () {
+				function loadEmbed() {
+					if (window.__igScript) return;
+					var s = document.createElement("script");
+					s.async = true;
+					s.src = "https://www.instagram.com/embed.js";
+					window.__igScript = s;
+					document.head.appendChild(s);
+				}
+
+				try {
+					var cached = JSON.parse(localStorage.getItem("bargniff:instagram") || "[]");
+					if (Array.isArray(cached) && cached.length) loadEmbed();
+				} catch (e) {}
+
+				window.__igList = fetch("/api/instagram", { cache: "no-cache" })
+					.then(function (r) { if (!r.ok) throw new Error("bad response"); return r.json(); })
+					.then(function (list) { if (Array.isArray(list) && list.length) loadEmbed(); return list; });
+				window.__igList.catch(function () {});
+			})();
+		</script>
+
 		<title>Bargniff</title>
 
 		<link rel="icon" type="image/png" href="/assets/rana-crema.png?v=1" />
@@ -1382,19 +1406,33 @@
 		try { localStorage.setItem(INSTA_CACHE_KEY, JSON.stringify(list)); } catch {}
 	}
 
+	function igProcess() {
+		if (window.instgrm && window.instgrm.Embeds) window.instgrm.Embeds.process();
+	}
+
+	// usa lo script già partito dal <head>, oppure lo avvia ora
 	function igLoadScript() {
 		if (igScriptState !== "idle") return;
 		igScriptState = "loading";
 
-		const script = document.createElement("script");
-		script.async = true;
-		script.src = "https://www.instagram.com/embed.js";
-		script.onload = () => { igScriptState = "ready"; };
-		script.onerror = () => {
+		let script = window.__igScript;
+		if (!script) {
+			script = document.createElement("script");
+			script.async = true;
+			script.src = "https://www.instagram.com/embed.js";
+			document.head.appendChild(script);
+		}
+
+		if (window.instgrm) {
+			igScriptState = "ready";
+			return;
+		}
+
+		script.addEventListener("load", () => { igScriptState = "ready"; igProcess(); }, { once: true });
+		script.addEventListener("error", () => {
 			igScriptState = "failed";
 			igGrid.querySelectorAll(".insta-card.is-loading").forEach(igFallback);
-		};
-		document.head.appendChild(script);
+		}, { once: true });
 	}
 
 	// se l'embed non parte (blocco contenuti, rete lenta) resta almeno il link al post
@@ -1408,6 +1446,7 @@
 
 		card.classList.remove("is-loading");
 		card.replaceChildren(link);
+		card.dispatchEvent(new Event("igdone"));
 	}
 
 	function igWatch(card) {
@@ -1415,6 +1454,7 @@
 			observer.disconnect();
 			clearTimeout(timer);
 			card.classList.remove("is-loading");
+			card.dispatchEvent(new Event("igdone"));
 			if (!igGrid.querySelector(".is-loading")) igGrid.removeAttribute("aria-busy");
 		};
 
@@ -1434,7 +1474,7 @@
 		const timer = setTimeout(() => {
 			if (card.querySelector("iframe")) finish();
 			else { observer.disconnect(); igFallback(card); }
-		}, 15000);
+		}, 20000);
 	}
 
 	function igCard(url) {
@@ -1447,14 +1487,23 @@
 		skeleton.setAttribute("aria-hidden", "true");
 		skeleton.innerHTML = '<div class="insta-skel-head"><i></i><div><i></i><i></i></div></div><i class="insta-skel-media"></i><i></i><i></i>';
 
+		card.append(skeleton);
+		return card;
+	}
+
+	// aggiunge il post vero dentro il box di caricamento e chiede a Instagram di disegnarlo
+	function igStart(card) {
+		if (card.dataset.started) return;
+		card.dataset.started = "1";
+
 		const quote = document.createElement("blockquote");
 		quote.className = "instagram-media";
-		quote.setAttribute("data-instgrm-permalink", url);
+		quote.setAttribute("data-instgrm-permalink", card.dataset.url);
 		quote.setAttribute("data-instgrm-version", "14");
+		card.append(quote);
 
-		card.append(skeleton, quote);
 		igWatch(card);
-		return card;
+		igProcess();
 	}
 
 	function igRender(list) {
@@ -1469,12 +1518,18 @@
 			return;
 		}
 
+		const cards = list.map(igCard);
 		igSection.hidden = false;
 		igGrid.setAttribute("aria-busy", "true");
-		igGrid.replaceChildren(...list.map(igCard));
-
+		igGrid.replaceChildren(...cards);
 		igLoadScript();
-		if (igScriptState === "ready" && window.instgrm) window.instgrm.Embeds.process();
+
+		// il primo post parte subito con tutta la banda; gli altri quando il primo è pronto
+		// (o dopo 3 secondi), così il primo compare prima invece di caricare tutti insieme lentamente
+		igStart(cards[0]);
+		const startRest = () => cards.slice(1).forEach(igStart);
+		cards[0].addEventListener("igdone", startRest, { once: true });
+		setTimeout(startRest, 3000);
 	}
 
 	async function loadInstagram() {
@@ -1483,10 +1538,8 @@
 		if (cached.length) igRender(cached);
 
 		try {
-			const response = await fetch("/api/instagram", { cache: "no-cache" });
-			if (!response.ok) throw new Error("bad response");
-
-			const fresh = (await response.json())
+			const early = window.__igList || fetch("/api/instagram", { cache: "no-cache" }).then((r) => r.json());
+			const fresh = (await early)
 				.filter((u) => typeof u === "string" && INSTA_URL.test(u))
 				.slice(0, 3);
 
