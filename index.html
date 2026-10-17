@@ -758,6 +758,44 @@
 				font-size: 0.98rem;
 			}
 
+			/* schede degli articoli */
+
+			.art-card {
+				display: block;
+				overflow: hidden;
+				color: inherit;
+			}
+
+			.art-cover {
+				aspect-ratio: 16 / 10;
+				margin: -34px -28px 22px;
+				overflow: hidden;
+				background: #eadfb4;
+			}
+
+			.art-cover img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+
+			.art-date {
+				display: block;
+				margin-bottom: 8px;
+				color: var(--forest);
+				font-size: 0.82rem;
+				font-weight: 700;
+				letter-spacing: 0.05em;
+				text-transform: uppercase;
+			}
+
+			.art-more {
+				display: inline-block;
+				margin-top: 14px;
+				color: var(--forest);
+				font-weight: 700;
+			}
+
 			/* sezione donazione (verde) */
 
 			.donation-section {
@@ -885,22 +923,8 @@
 
 			.foot-top {
 				display: grid;
-				grid-template-columns: 1.4fr 1fr;
+				grid-template-columns: 1fr;
 				gap: 50px;
-			}
-
-			.foot-brand {
-				display: flex;
-				align-items: center;
-				gap: 10px;
-				margin-bottom: 14px;
-				font-family: "Fredoka", sans-serif;
-				font-size: 1.3rem;
-				font-weight: 700;
-			}
-
-			.foot-brand img {
-				width: 34px;
 			}
 
 			.foot-col p {
@@ -1247,6 +1271,7 @@
 						<button
 							type="button"
 							class="lily-trigger"
+							data-scroll="#articoli"
 							data-eyebrow="Articoli"
 							data-title="Appunti dalla riva"
 							data-copy="Articoli scritti da noi"
@@ -1274,33 +1299,14 @@
 	<div class="wave wave-up" data-fill="#432f2c" aria-hidden="true"></div>
 
 	<!-- perché le rane -->
-	<section class="why section-pad" id="perche">
+	<!-- articoli (gestiti da /admin; la sezione resta nascosta se non ce ne sono) -->
+	<section class="why section-pad" id="articoli" hidden>
 		<div class="wrap">
-			<div class="why-grid">
-				<div class="why-card reveal">
-					<div class="why-icon">
-						<img src="assets/rana-marrone.png" alt="" />
-					</div>
-					<h3>vecchio articolo #1</h3>
-					<p>da decidere se mettiamo articolo qua...</p>
-				</div>
-
-				<div class="why-card reveal">
-					<div class="why-icon">
-						<img src="assets/rana-crema.png" alt="" />
-					</div>
-					<h3>vecchio articolo #2</h3>
-					<p>da decidere se mettiamo articolo qua...</p>
-				</div>
-
-				<div class="why-card reveal">
-					<div class="why-icon">
-						<img src="assets/rana-verde.png" alt="" />
-					</div>
-					<h3>vecchio articolo #3</h3>
-					<p>da decidere se mettiamo articolo qua...</p>
-				</div>
-			</div>
+			<h2 class="insta-title">Articoli</h2>
+			<div class="why-grid" id="art-grid"></div>
+			<p class="insta-follow" id="art-all" hidden>
+				<a href="/articoli">Tutti gli articoli →</a>
+			</p>
 		</div>
 	</section>
 
@@ -1349,19 +1355,9 @@
 	<div class="wrap">
 		<div class="foot-top">
 			<div class="foot-col">
-				<div class="foot-brand">
-					<img src="assets/rana-marrone.png" alt="" />
-					Bargniff
-				</div>
-				<p>EX FFFPavia -> Bargniff</p>
-			</div>
-
-			<div class="foot-col">
 				<h4>Contatti</h4>
 				<ul>
-					<li><a href="mailto:ciao@bargniff.it">ciao@bargniff.it</a></li>
 					<li><a href="mailto:bargniff.pavia@proton.me">bargniff.pavia@proton.me</a></li>
-					<li>Pavia, Lombardia</li>
 					<li><a href="https://www.instagram.com/bargniff.pavia" target="_blank" rel="noopener noreferrer">Instagram</a></li>
 					<li><a href="https://www.facebook.com/share/19WugfELYb/" target="_blank" rel="noopener noreferrer">Facebook</a></li>
 					<li><a href="https://www.tiktok.com/@bargniff.pavia" target="_blank" rel="noopener noreferrer">TikTok</a></li>
@@ -1552,6 +1548,81 @@
 
 	loadInstagram();
 
+	// articoli: schede con gli ultimi 3 pubblicati; se non ce ne sono la sezione resta nascosta
+	const artSection = document.querySelector("#articoli");
+	const artGrid = document.querySelector("#art-grid");
+	const artAll = document.querySelector("#art-all");
+	const ART_ICONS = ["assets/rana-marrone.png", "assets/rana-crema.png", "assets/rana-verde.png"];
+
+	function artDate(iso) {
+		const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || "");
+		if (!m) return "";
+		return new Date(+m[1], +m[2] - 1, +m[3]).toLocaleDateString("it-IT", { day: "numeric", month: "long", year: "numeric" });
+	}
+
+	function artCard(article, index) {
+		const card = document.createElement("a");
+		card.className = "why-card art-card";
+		card.href = "/articolo/" + encodeURIComponent(article.id);
+
+		if (article.cover) {
+			const cover = document.createElement("div");
+			cover.className = "art-cover";
+			const img = document.createElement("img");
+			img.src = "/api/img/" + encodeURIComponent(article.cover);
+			img.alt = "";
+			img.loading = "lazy";
+			cover.append(img);
+			card.append(cover);
+		} else {
+			const icon = document.createElement("div");
+			icon.className = "why-icon";
+			const img = document.createElement("img");
+			img.src = ART_ICONS[index % ART_ICONS.length];
+			img.alt = "";
+			icon.append(img);
+			card.append(icon);
+		}
+
+		const date = document.createElement("span");
+		date.className = "art-date";
+		date.textContent = artDate(article.date);
+
+		const title = document.createElement("h3");
+		title.textContent = article.title;
+
+		card.append(date, title);
+
+		if (article.excerpt) {
+			const excerpt = document.createElement("p");
+			excerpt.textContent = article.excerpt;
+			card.append(excerpt);
+		}
+
+		const more = document.createElement("span");
+		more.className = "art-more";
+		more.textContent = "Leggi l'articolo →";
+		card.append(more);
+		return card;
+	}
+
+	async function loadArticles() {
+		try {
+			const response = await fetch("/api/articles");
+			if (!response.ok) throw new Error("bad response");
+			const list = await response.json();
+			if (!Array.isArray(list) || !list.length) { artSection.hidden = true; return; }
+
+			artGrid.replaceChildren(...list.slice(0, 3).map(artCard));
+			artAll.hidden = list.length <= 3;
+			artSection.hidden = false;
+		} catch {
+			artSection.hidden = true;
+		}
+	}
+
+	loadArticles();
+
 	// pannello di testo che cambia contenuto passando sopra le ninfee
 	const missionPanel = document.querySelector(".mission-info-panel");
 
@@ -1590,6 +1661,9 @@
 				if (trigger.classList.contains("donation-trigger")) {
 					document.querySelector("#donazione").scrollIntoView({ behavior: "smooth", block: "center" });
 				}
+
+				const target = trigger.dataset.scroll && document.querySelector(trigger.dataset.scroll);
+				if (target && !target.hidden) target.scrollIntoView({ behavior: "smooth", block: "start" });
 			});
 
 			trigger.addEventListener("pointerleave", () => {
@@ -1726,4 +1800,4 @@
 	requestAnimationFrame(animateWaves);
 	</script>
 	</body>
-</html>
+</html>
