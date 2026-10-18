@@ -363,16 +363,9 @@ header.site img{width:38px;height:38px;object-fit:contain}
 .hero{position:relative;padding:54px 24px 0;overflow:hidden;background:var(--brown);color:var(--cream);text-align:center}
 .hero .eyebrow{margin:0 0 6px;color:var(--mint);font:700 1.5rem Caveat,cursive}
 .hero h1{margin:0 auto;max-width:820px;font:600 clamp(2.3rem,6.5vw,4.2rem)/1.05 Fredoka,"Segoe UI",Arial,sans-serif}
-.hero .lead{max-width:560px;margin:16px auto 0;color:rgba(251,249,225,.82);font-size:1.08rem}
 .count{display:inline-block;margin-top:18px;padding:5px 16px;border-radius:99px;background:rgba(23,252,150,.16);color:var(--mint);font-weight:700}
-.pond{position:relative;width:170px;height:150px;margin:20px auto -4px}
-.pond i{position:absolute;left:50%;top:60%;width:120px;height:120px;margin:-60px 0 0 -60px;border:2px solid var(--mint);border-radius:50%;opacity:0;animation:ring 4.5s var(--ease) infinite}
-.pond i:nth-child(2){animation-delay:1.5s;border-color:var(--gold)}
-.pond i:nth-child(3){animation-delay:3s;border-color:var(--cream)}
-.pond img{position:absolute;left:50%;top:8px;width:104px;margin-left:-52px;animation:bob 6s ease-in-out infinite}
-@keyframes ring{from{transform:scale(.6);opacity:.6}to{transform:scale(1.7);opacity:0}}
 @keyframes bob{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-8px) rotate(-3deg)}}
-.wave{display:block;width:calc(100% + 48px);max-width:none;height:70px;margin:-1px 0 0 -24px}
+.wave{display:block;width:calc(100% + 48px);max-width:none;height:70px;margin:26px 0 0 -24px}
 .wave path{fill:var(--cream)}
 
 nav.years{position:sticky;top:64px;z-index:20;display:flex;justify-content:center;flex-wrap:wrap;gap:8px;padding:12px 16px;background:rgba(251,249,225,.94);backdrop-filter:blur(6px)}
@@ -505,9 +498,7 @@ export function renderArchive(list) {
 <section class="hero">
   <p class="eyebrow">Dal laghetto del Bargniff</p>
   <h1>Tutti i nostri articoli</h1>
-  <p class="lead">Quello che abbiamo scritto, dal più recente al più vecchio. Tuffati!</p>
   ${total ? `<span class="count">${countText}</span>` : ""}
-  <div class="pond" aria-hidden="true"><i></i><i></i><i></i><img src="/assets/rana-crema.png" alt=""></div>
   <svg class="wave" viewBox="0 0 1440 70" preserveAspectRatio="none" aria-hidden="true"><path d="M0 40 C 180 0, 360 0, 540 30 S 900 70, 1080 35 S 1340 5, 1440 30 L1440 70 L0 70 Z"/></svg>
 </section>
 ${body}
