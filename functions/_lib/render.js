@@ -488,7 +488,7 @@ export function renderArchive(list) {
 </main>
 <div class="foot"><a class="back" href="/">← Torna alla home</a></div>`
     : `<main class="timeline" style="padding-top:24px">
-  <div class="empty"><img src="/assets/rana-verde.png" alt=""><h2 style="font-family:Fredoka,sans-serif">Il laghetto è ancora silenzioso</h2><p>Presto qui troverai tutti gli articoli del Bargniff.</p></div>
+  <div class="empty"><h2 style="font-family:Fredoka,sans-serif">Il laghetto è ancora silenzioso</h2><p>Presto qui troverai tutti gli articoli del Bargniff.</p></div>
 </main>
 <div class="foot" style="text-align:center"><a class="back" href="/">← Torna alla home</a></div>`;
 
