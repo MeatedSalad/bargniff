@@ -484,7 +484,7 @@ export function renderArchive(list) {
     ? `${chips ? `<nav class="years" aria-label="Vai all'anno">${chips}</nav>` : ""}
 <main class="timeline">
   ${sections}
-  <div class="end"><img src="/assets/rana-verde.png" alt=""><p>Siamo arrivati in fondo al laghetto!</p></div>
+  <div class="end"><p>Siamo arrivati in fondo al laghetto!</p></div>
 </main>
 <div class="foot"><a class="back" href="/">← Torna alla home</a></div>`
     : `<main class="timeline" style="padding-top:24px">
@@ -496,7 +496,6 @@ export function renderArchive(list) {
 <body>
 <header class="site"><a href="/"><img src="/assets/rana-crema.png" alt="">Bargniff</a></header>
 <section class="hero">
-  <p class="eyebrow">Dal laghetto del Bargniff</p>
   <h1>Tutti i nostri articoli</h1>
   ${total ? `<span class="count">${countText}</span>` : ""}
   <svg class="wave" viewBox="0 0 1440 70" preserveAspectRatio="none" aria-hidden="true"><path d="M0 40 C 180 0, 360 0, 540 30 S 900 70, 1080 35 S 1340 5, 1440 30 L1440 70 L0 70 Z"/></svg>
