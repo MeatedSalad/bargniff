@@ -82,18 +82,22 @@ label.check input{width:auto;margin:0}
 .ed sup[data-fn]{padding:0 2px;color:var(--forest);font-weight:700;cursor:default}
 .ed a{color:#2d6a7a}
 .blk hr{margin:16px 0;border:0;border-top:2px solid var(--line)}
-.imgblk{margin:10px 0;padding:12px;background:#faf8ee;border:1px solid var(--line);border-radius:12px}
-.img-stage{display:flex;align-items:center;justify-content:center;min-height:120px;overflow:hidden;border-radius:8px;background:#efe9cf}
-.img-stage[data-layout=center]{width:64%;margin:0 auto}
-.img-stage[data-layout=left]{width:46%;margin:0 auto 0 0}
-.img-stage[data-layout=right]{width:46%;margin:0 0 0 auto}
+#blocks{display:flow-root}
+.blk[data-type=img]{margin:12px 0}
+.blk[data-type=img][data-layout=center]{width:64%;margin:12px auto}
+.blk[data-type=img][data-layout=left]{float:left;z-index:1;width:46%;margin:6px 24px 12px 0}
+.blk[data-type=img][data-layout=right]{float:right;z-index:1;width:46%;margin:6px 0 12px 24px}
+.imgblk{margin:0;padding:0}
+.img-stage{display:flex;align-items:center;justify-content:center;min-height:110px;overflow:hidden;border-radius:6px;background:#efe9cf}
 .img-stage img{display:block;width:100%;height:auto}
 .img-stage .pick{padding:26px;border:0;background:transparent;color:var(--forest);font-weight:700;cursor:pointer}
 .img-stage .busy{padding:26px;color:var(--muted)}
-.img-controls{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
-.img-controls label{font-size:.78rem}
-.img-controls input,.img-controls select{width:100%;margin-top:4px;padding:7px 9px;background:#fff;border:1px solid var(--line);border-radius:8px}
-.img-controls .wide{grid-column:1/-1}
+.imgblk .img-caption{display:block;width:100%;margin-top:6px;padding:4px 6px;border:0;border-bottom:1px dashed var(--line);background:transparent;color:#555;font-size:.85rem}
+.imgblk .img-caption:focus{outline:none;border-bottom-color:var(--forest)}
+.blk[data-type=img] .blk-tools{top:8px;right:8px;flex-wrap:wrap;justify-content:flex-end;max-width:calc(100% - 16px)}
+.blk-tools .txt{width:auto;padding:0 8px;font-size:.78rem;font-weight:600}
+.blk-tools .on{background:#e0f2e9;color:var(--forest)}
+.blk-tools .sep{width:1px;margin:3px 3px;background:var(--line)}
 .addbar{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 4px;padding-top:14px;border-top:1px dashed var(--line)}
 .addbar .lbl{align-self:center;color:var(--muted);font-size:.85rem;margin-right:4px}
 .menu{position:absolute;z-index:60;min-width:190px;padding:6px;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 16px 36px -14px rgba(0,0,0,.45)}
@@ -117,7 +121,8 @@ label.check input{width:auto;margin:0}
 .insta-item span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .insta-item b{width:24px;color:var(--forest)}
 @media (max-width:720px){
-  .grid3,.grid2,.img-controls{grid-template-columns:1fr}
+  .blk[data-type=img][data-layout]{float:none;width:100%;margin:12px 0}
+  .grid3,.grid2{grid-template-columns:1fr}
   .tabs{margin-left:0}.site-link{display:none}
   #blocks{padding:18px 14px}
   .fmt .hintline{display:none}
@@ -157,14 +162,11 @@ label.check input{width:auto;margin:0}
       <button type="button" class="btn ghost" id="btn-back">← Articoli</button>
       <span id="save-state" class="muted"></span>
       <span class="spacer"></span>
-      <label>Stato
-        <select id="f-status">
-          <option value="draft">Bozza</option>
-          <option value="published">Pubblicato</option>
-        </select>
-      </label>
+      <span class="badge draft" id="status-badge">Bozza</span>
+      <a class="btn small" id="link-live" href="#" target="_blank" rel="noopener" hidden>Vedi online ↗</a>
       <button type="button" class="btn" id="btn-preview">Anteprima</button>
-      <button type="button" class="btn primary" id="btn-save">Salva</button>
+      <button type="button" class="btn" id="btn-draft">Salva bozza</button>
+      <button type="button" class="btn primary" id="btn-publish">Pubblica</button>
     </div>
 
     <div class="page">
@@ -369,7 +371,7 @@ $("#btn-new").addEventListener("click", () => openEditor(null));
 
 /* ---------- editor: stato ---------- */
 
-const state = { id: null, dirty: false, saving: false, notes: [] };
+const state = { id: null, dirty: false, saving: false, status: "draft" };
 
 function markDirty() {
   if (!state.dirty) {
@@ -378,6 +380,18 @@ function markDirty() {
     el.textContent = "Modifiche non salvate";
     el.classList.add("dirty");
   }
+}
+
+function applyStatusUi() {
+  const published = state.status === "published";
+  const badge = $("#status-badge");
+  badge.textContent = published ? "Pubblicato" : "Bozza";
+  badge.className = "badge " + (published ? "pub" : "draft");
+  $("#btn-publish").textContent = published ? "Aggiorna articolo" : "Pubblica";
+  $("#btn-draft").textContent = published ? "Metti in bozza" : "Salva bozza";
+  const live = $("#link-live");
+  live.hidden = !(published && state.id);
+  if (state.id) live.href = "/articolo/" + encodeURIComponent(state.id);
 }
 
 function markSaved() {
@@ -414,7 +428,8 @@ async function openEditor(id) {
   $("#f-place").value = article.place || "";
   $("#f-signature").value = article.signature || "";
   $("#f-date").value = article.date || todayISO();
-  $("#f-status").value = article.status === "published" ? "published" : "draft";
+  state.status = article.status === "published" ? "published" : "draft";
+  applyStatusUi();
   $("#f-dateline").checked = article.showDateline !== false;
   setCover(article.cover || "");
 
@@ -440,7 +455,7 @@ $("#btn-back").addEventListener("click", async () => {
   showTab("articles");
 });
 
-["#f-title", "#f-subtitle", "#f-author", "#f-place", "#f-signature", "#f-date", "#f-status", "#f-dateline"]
+["#f-title", "#f-subtitle", "#f-author", "#f-place", "#f-signature", "#f-date", "#f-dateline"]
   .forEach((sel) => $(sel).addEventListener("input", markDirty));
 
 /* ---------- editor: blocchi ---------- */
@@ -481,8 +496,13 @@ function createBlock(data) {
   if (data.type === "hr") {
     block.append(document.createElement("hr"));
   } else if (data.type === "img") {
-    block.append(buildImageBlock(block, data));
+    block.dataset.src = data.src || "";
+    block.dataset.layout = ["full", "center", "left", "right"].includes(data.layout) ? data.layout : "full";
+    block.dataset.alt = data.alt || "";
+    tools.prepend(...imageTools());
+    block.append(buildImageBlock(data));
     paintStage(block);
+    syncLayoutButtons(block);
   } else {
     const ed = document.createElement("div");
     ed.className = "ed ed-" + data.type;
@@ -496,33 +516,46 @@ function createBlock(data) {
   return block;
 }
 
-function buildImageBlock(block, data) {
+const LAYOUT_BUTTONS = [
+  ["full", "Intera", "Foto a tutta larghezza"],
+  ["center", "Centrata", "Foto centrata, più piccola"],
+  ["left", "Sinistra", "Foto a sinistra: il testo scorre accanto"],
+  ["right", "Destra", "Foto a destra: il testo scorre accanto"],
+];
+
+function imageTools() {
+  const buttons = LAYOUT_BUTTONS.map(([name, label, title]) => {
+    const b = toolButton("lay-" + name, label, title);
+    b.classList.add("txt");
+    return b;
+  });
+  const alt = toolButton("alt", "Descrizione", "Descrivi la foto per chi non la vede");
+  const replace = toolButton("replace", "Cambia foto", "Sostituisci la foto");
+  alt.classList.add("txt");
+  replace.classList.add("txt");
+  const sep = document.createElement("span");
+  sep.className = "sep";
+  return [...buttons, alt, replace, sep];
+}
+
+function syncLayoutButtons(block) {
+  $$(".blk-tools [data-act^=lay-]", block).forEach((b) => b.classList.toggle("on", b.dataset.act === "lay-" + block.dataset.layout));
+}
+
+function buildImageBlock(data) {
   const figure = document.createElement("figure");
   figure.className = "imgblk";
-  figure.style.margin = "10px 0";
-  block.dataset.src = data.src || "";
 
-  figure.innerHTML = `
-    <div class="img-stage" data-layout="${data.layout || "full"}"></div>
-    <div class="img-controls">
-      <label>Posizione nell'articolo
-        <select class="img-layout">
-          <option value="full">A tutta larghezza</option>
-          <option value="center">Centrata, più piccola</option>
-          <option value="left">A sinistra, il testo scorre accanto</option>
-          <option value="right">A destra, il testo scorre accanto</option>
-        </select>
-      </label>
-      <label>Didascalia <input class="img-caption" maxlength="400" placeholder="Facoltativa" /></label>
-      <label class="wide">Descrizione della foto (per chi non la vede) <input class="img-alt" maxlength="200" placeholder="Facoltativa" /></label>
-    </div>`;
+  const stage = document.createElement("div");
+  stage.className = "img-stage";
+  const caption = document.createElement("input");
+  caption.className = "img-caption";
+  caption.maxLength = 400;
+  caption.placeholder = "Didascalia (facoltativa)";
+  caption.value = data.caption || "";
+  caption.addEventListener("input", markDirty);
 
-  $(".img-layout", figure).value = data.layout || "full";
-  $(".img-caption", figure).value = data.caption || "";
-  $(".img-alt", figure).value = data.alt || "";
-  $(".img-layout", figure).addEventListener("change", (e) => { $(".img-stage", figure).dataset.layout = e.target.value; markDirty(); });
-  $$("input", figure).forEach((i) => i.addEventListener("input", markDirty));
-
+  figure.append(stage, caption);
   return figure;
 }
 
@@ -535,16 +568,11 @@ function paintStage(block) {
     img.src = "/api/img/" + block.dataset.src;
     img.alt = "";
     stage.append(img);
-
-    const replace = document.createElement("button");
-    replace.type = "button"; replace.className = "btn small"; replace.textContent = "Sostituisci foto";
-    replace.style.cssText = "position:absolute;margin:8px";
-    replace.onclick = () => chooseImageFor(block);
-    stage.style.position = "relative";
-    stage.append(replace);
   } else {
     const pick = document.createElement("button");
-    pick.type = "button"; pick.className = "pick"; pick.textContent = "＋ Scegli una foto…";
+    pick.type = "button";
+    pick.className = "pick";
+    pick.textContent = "＋ Scegli una foto…";
     pick.onclick = () => chooseImageFor(block);
     stage.append(pick);
   }
@@ -634,7 +662,17 @@ blocksEl().addEventListener("click", (event) => {
   const block = button.closest(".blk");
   const act = button.dataset.act;
 
-  if (act === "up" && block.previousElementSibling) block.previousElementSibling.before(block);
+  if (act.startsWith("lay-")) {
+    block.dataset.layout = act.slice(4);
+    syncLayoutButtons(block);
+  } else if (act === "alt") {
+    const value = prompt("Descrivi la foto per chi non può vederla (facoltativo):", block.dataset.alt || "");
+    if (value === null) return;
+    block.dataset.alt = value.trim();
+  } else if (act === "replace") {
+    chooseImageFor(block);
+    return;
+  } else if (act === "up" && block.previousElementSibling) block.previousElementSibling.before(block);
   else if (act === "down" && block.nextElementSibling) block.nextElementSibling.after(block);
   else if (act === "add") return openMenu(button, (type) => insertBlock(type, block));
   else if (act === "del") {
@@ -857,7 +895,7 @@ $("#btn-cover-del").addEventListener("click", () => { setCover(""); markDirty();
 
 /* ---------- salvataggio ---------- */
 
-function collect() {
+function collect(status) {
   const blocks = $$(".blk", blocksEl()).map((el) => {
     const type = el.dataset.type;
     if (type === "hr") return { type };
@@ -865,9 +903,9 @@ function collect() {
       return {
         type,
         src: el.dataset.src || "",
-        layout: $(".img-layout", el).value,
+        layout: el.dataset.layout || "full",
         caption: $(".img-caption", el).value,
-        alt: $(".img-alt", el).value,
+        alt: el.dataset.alt || "",
       };
     }
     return { type, html: cleanHtml($(".ed", el).innerHTML) };
@@ -881,7 +919,7 @@ function collect() {
     place: $("#f-place").value,
     signature: $("#f-signature").value,
     date: $("#f-date").value,
-    status: $("#f-status").value,
+    status: status || state.status,
     showDateline: $("#f-dateline").checked,
     cover: coverId,
     blocks,
@@ -889,19 +927,22 @@ function collect() {
   };
 }
 
-async function save() {
+async function save(status) {
   if (state.saving) return null;
   state.saving = true;
-  $("#btn-save").disabled = true;
+  $("#btn-publish").disabled = true;
+  $("#btn-draft").disabled = true;
   $("#save-state").textContent = "Salvataggio…";
   try {
     const result = await api("/api/admin/articles", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify(collect()),
+      body: JSON.stringify(collect(status)),
     });
     state.id = result.id;
+    state.status = status || state.status;
     $("#btn-delete").hidden = false;
+    applyStatusUi();
     markSaved();
     return result;
   } catch (error) {
@@ -910,13 +951,26 @@ async function save() {
     return null;
   } finally {
     state.saving = false;
-    $("#btn-save").disabled = false;
+    $("#btn-publish").disabled = false;
+    $("#btn-draft").disabled = false;
   }
 }
 
-$("#btn-save").addEventListener("click", async () => {
-  const result = await save();
-  if (result) toast($("#f-status").value === "published" ? "Salvato. L'articolo è online." : "Salvato come bozza.");
+$("#btn-publish").addEventListener("click", async () => {
+  const wasPublished = state.status === "published";
+  const result = await save("published");
+  if (result) toast(wasPublished ? "Articolo aggiornato sul sito." : "Pubblicato! Ora è online sul sito.");
+});
+
+$("#btn-draft").addEventListener("click", async () => {
+  if (state.status === "published") {
+    if (!confirm("L'articolo non sarà più visibile sul sito. Vuoi metterlo in bozza?")) return;
+    const result = await save("draft");
+    if (result) toast("Ora è una bozza: non è più visibile sul sito.");
+  } else {
+    const result = await save("draft");
+    if (result) toast("Bozza salvata.");
+  }
 });
 
 $("#btn-preview").addEventListener("click", async () => {
@@ -947,7 +1001,7 @@ $("#btn-delete").addEventListener("click", async () => {
 document.addEventListener("keydown", (event) => {
   if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "s" && editing) {
     event.preventDefault();
-    $("#btn-save").click();
+    save().then((result) => { if (result) toast("Salvato."); });
   }
 });
 

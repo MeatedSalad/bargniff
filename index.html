@@ -1190,8 +1190,8 @@
 		<div class="wrap">
 			<div class="hero-copy reveal in">
 				<h1>
-					Collettivo
-					<span>Bargniff!</span>
+					Rocco plz
+					<span>dacci la tua poesia!</span>
 				</h1>
 			</div>
 		</div>
@@ -1271,10 +1271,10 @@
 						<button
 							type="button"
 							class="lily-trigger"
-							data-scroll="#articoli"
+							data-href="/articoli"
 							data-eyebrow="Articoli"
 							data-title="Appunti dalla riva"
-							data-copy="Articoli scritti da noi"
+							data-copy="Tutti gli articoli del Bargniff, dal più recente. Clicca per tuffarti!"
 						>
 							Articoli
 						</button>
@@ -1662,8 +1662,8 @@
 					document.querySelector("#donazione").scrollIntoView({ behavior: "smooth", block: "center" });
 				}
 
-				const target = trigger.dataset.scroll && document.querySelector(trigger.dataset.scroll);
-				if (target && !target.hidden) target.scrollIntoView({ behavior: "smooth", block: "start" });
+				// la ninfea "Articoli" apre la pagina con tutti gli articoli
+				if (trigger.dataset.href) window.location.href = trigger.dataset.href;
 			});
 
 			trigger.addEventListener("pointerleave", () => {
@@ -1800,4 +1800,4 @@
 	requestAnimationFrame(animateWaves);
 	</script>
 	</body>
-</html>
+</html>
