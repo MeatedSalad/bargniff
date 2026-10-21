@@ -1,0 +1,5 @@
+# Le pagine pubbliche si possono indicizzare; l'area riservata e le API no.
+User-agent: *
+Allow: /api/img/
+Disallow: /admin/
+Disallow: /api/

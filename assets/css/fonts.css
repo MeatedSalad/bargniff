@@ -1,0 +1,49 @@
+/*
+ * Font del sito, serviti da qui e non da Google Fonts:
+ * così il browser dei visitatori non contatta server esterni solo per mostrare il testo.
+ * Fredoka, Raleway e Caveat sono distribuiti con licenza SIL OFL 1.1 (vedi i file LICENSE in assets/fonts).
+ */
+
+@font-face {
+	font-family: "Fredoka";
+	src: url("../fonts/fredoka.woff2") format("woff2");
+	font-weight: 300 700;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "Raleway";
+	src: url("../fonts/raleway.woff2") format("woff2");
+	font-weight: 100 900;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "Caveat";
+	src: url("../fonts/caveat-700.woff2") format("woff2");
+	font-weight: 700;
+	font-style: normal;
+	font-display: swap;
+}
+
+/* Font del logo */
+
+@font-face {
+	font-family: "Les Flos Sage";
+	src: url("../fonts/Les-Flos-Sage.otf") format("opentype");
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "Les Flos Chaos";
+	src: url("../fonts/Les-Flos-Chaos.otf") format("opentype");
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "Les Flos Sans";
+	src: url("../fonts/Les-Flos-Sans.otf") format("opentype");
+	font-display: swap;
+}
