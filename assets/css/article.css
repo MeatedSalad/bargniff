@@ -1,6 +1,7 @@
 /* Pagina di un articolo: schermo e stampa (A4). Font in fonts.css. */
 
 :root {
+	--font-title: "Les Flos Sage", "Fredoka", sans-serif; /* font dei titoli */
 	--olive: #98992b;
 	--red: #e1141c;
 	--ink: #1c1c1c;
@@ -87,7 +88,7 @@ table.sheet > tfoot > tr > td {
 	border-bottom: 2px solid var(--olive);
 	color: var(--olive);
 	font:
-		700 38px/1.1 Fredoka,
+		700 38px/1.1 var(--font-title),
 		"Segoe UI",
 		Arial,
 		sans-serif;
@@ -101,6 +102,7 @@ table.sheet > tfoot > tr > td {
 	height: 84px;
 }
 .title {
+	font-family: var(--font-title);
 	margin: 6px 0 20px;
 	color: var(--red);
 	font-size: 1.5rem;
@@ -133,6 +135,7 @@ table.sheet > tfoot > tr > td {
 	color: #2d6a7a;
 }
 .art .sub {
+	font-family: var(--font-title);
 	margin: 26px 0 10px;
 	font-size: 1.2rem;
 	line-height: 1.3;
@@ -321,5 +324,22 @@ sup.fn a {
 	}
 	.contacts span {
 		text-align: center !important;
+	}
+}
+
+/* sullo schermo (non in stampa) i link della pagina sono più comodi da toccare */
+@media screen {
+	.bar a {
+		display: inline-block;
+		padding: 10px 6px;
+	}
+
+	.bar button {
+		padding: 10px 18px;
+	}
+
+	.contacts a {
+		display: inline-block;
+		padding: 8px 0;
 	}
 }

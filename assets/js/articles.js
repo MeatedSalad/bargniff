@@ -1,5 +1,7 @@
 // Sezione "Articoli" della home: mostra gli ultimi 3 articoli pubblicati dall'admin.
 // Se non ce ne sono, la sezione resta nascosta.
+// Sugli schermi stretti le schede si scorrono di lato; due frecce compaiono solo
+// quando c'è davvero qualcosa da vedere a sinistra o a destra.
 
 const MAX_ON_HOME = 3;
 const FALLBACK_ICONS = [
@@ -12,6 +14,7 @@ export async function setupArticles() {
 	const section = document.querySelector("#articoli");
 	const grid = document.querySelector("#articles-grid");
 	const allArticlesLink = document.querySelector("#articles-all");
+	const scroller = document.querySelector("#articles-scroller");
 
 	try {
 		const response = await fetch("/api/articles");
@@ -23,6 +26,7 @@ export async function setupArticles() {
 		grid.replaceChildren(...articles.slice(0, MAX_ON_HOME).map(createArticleCard));
 		allArticlesLink.hidden = articles.length <= MAX_ON_HOME;
 		section.hidden = false;
+		setupArrows(scroller, grid);
 	} catch {
 		// Senza articoli (o con la rete che non risponde) la sezione resta nascosta.
 	}
@@ -80,4 +84,36 @@ function createArticleCard(article, index) {
 	card.append(createElement("span", "art-more", "Leggi l'articolo →"));
 
 	return card;
+}
+
+/* ---------- frecce per scorrere le schede ---------- */
+
+function setupArrows(scroller, grid) {
+	const previous = scroller.querySelector(".scroller-arrow--prev");
+	const next = scroller.querySelector(".scroller-arrow--next");
+
+	// Ogni freccia compare solo se da quella parte c'è ancora qualcosa da vedere.
+	function updateArrows() {
+		const maxScroll = grid.scrollWidth - grid.clientWidth;
+		previous.hidden = grid.scrollLeft <= 1;
+		next.hidden = maxScroll <= 1 || grid.scrollLeft >= maxScroll - 1;
+	}
+
+	function scrollByCard(direction) {
+		const card = grid.firstElementChild;
+		const gap = parseFloat(getComputedStyle(grid).columnGap) || 0;
+		const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+		grid.scrollBy({
+			left: direction * (card.offsetWidth + gap),
+			behavior: reduceMotion ? "auto" : "smooth",
+		});
+	}
+
+	previous.addEventListener("click", () => scrollByCard(-1));
+	next.addEventListener("click", () => scrollByCard(1));
+	grid.addEventListener("scroll", updateArrows, { passive: true });
+	new ResizeObserver(updateArrows).observe(grid);
+
+	updateArrows();
 }

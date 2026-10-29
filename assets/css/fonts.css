@@ -28,11 +28,15 @@
 	font-display: swap;
 }
 
-/* Font del logo */
+/* Font dei titoli e del logo */
 
+/* Font dei titoli. Ha un solo peso (Regular): dichiararlo valido per tutti i pesi evita che il
+   browser lo "ingrassi" da solo quando un titolo è in grassetto. */
 @font-face {
 	font-family: "Les Flos Sage";
 	src: url("../fonts/Les-Flos-Sage.otf") format("opentype");
+	font-weight: 100 900;
+	font-style: normal;
 	font-display: swap;
 }
 

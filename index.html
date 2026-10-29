@@ -15,8 +15,6 @@
 		     lo scuriscono da soli (tema scuro automatico) e lo fanno diventare tutto nero.
 		     Serve proprio "only light": con il solo "light" la protezione non funziona. -->
 		<meta name="color-scheme" content="light only" />
-		<!-- Chi usa l'estensione Dark Reader vede il sito con i suoi colori, non invertiti. -->
-		<meta name="darkreader-lock" />
 		<style>
 			html {
 				background: #fbf9e1;
@@ -30,6 +28,7 @@
 		<!-- I font principali partono subito, in parallelo al resto della pagina -->
 		<link rel="preload" href="/assets/fonts/fredoka.woff2" as="font" type="font/woff2" crossorigin />
 		<link rel="preload" href="/assets/fonts/raleway.woff2" as="font" type="font/woff2" crossorigin />
+		<link rel="preload" href="/assets/fonts/Les-Flos-Sage.otf" as="font" type="font/otf" crossorigin />
 
 		<link rel="stylesheet" href="/assets/css/fonts.css" />
 		<link rel="stylesheet" href="/assets/css/site.css" />
@@ -66,10 +65,10 @@
 		<div class="wrap">
 			<div class="hero-copy reveal in">
 				<h1>
-					Sota el pont de s’ciff e s’ciaff
-					g’è ‘l Bargniff Bargniff Bargnaff
-					<span>g’ha la vesta virdisina
-					grand dotor qi l’indovina!</span>
+					<span class="verse">Suta 'l pont de sciff e sciaff</span>
+					<span class="verse">gh'è 'l Bargniff Bargniff Bargnaff</span>
+					<span class="verse verse--green">gh'ha la vesta virdisina</span>
+					<span class="verse verse--green">gran dutur chi l'indovina</span>
 				</h1>
 			</div>
 		</div>
@@ -140,7 +139,7 @@
 							data-popup="construction"
 							data-eyebrow="Bargnifico"
 							data-title="Storie che fanno acqua"
-							data-copy="Il nostro giornalino"
+							data-copy="Il nostro giornale? fumetto? da decidere con Rocco"
 						>
 							Bargnifico
 						</button>
@@ -195,7 +194,11 @@
 	<section class="why section-pad" id="articoli" hidden>
 		<div class="wrap">
 			<h2 class="insta-title">Articoli</h2>
-			<div class="why-grid" id="articles-grid"></div>
+			<div class="scroller" id="articles-scroller">
+				<button type="button" class="scroller-arrow scroller-arrow--prev" aria-label="Articoli precedenti" hidden>←</button>
+				<div class="why-grid" id="articles-grid"></div>
+				<button type="button" class="scroller-arrow scroller-arrow--next" aria-label="Articoli successivi" hidden>→</button>
+			</div>
 			<p class="insta-follow" id="articles-all" hidden>
 				<a href="/articoli">Tutti gli articoli →</a>
 			</p>

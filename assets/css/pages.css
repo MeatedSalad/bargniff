@@ -1,6 +1,7 @@
 /* Pagine secondarie: archivio degli articoli e "non trovato". Font in fonts.css. */
 
 :root {
+	--font-title: "Les Flos Sage", "Fredoka", sans-serif; /* font dei titoli */
 	--brown: #432f2c;
 	--cream: #fbf9e1;
 	--forest: #06754d;
@@ -42,7 +43,7 @@ header.site a {
 	padding: 12px;
 	color: var(--cream);
 	font:
-		700 1.5rem Fredoka,
+		700 1.5rem var(--font-title),
 		"Segoe UI",
 		Arial,
 		sans-serif;
@@ -66,7 +67,7 @@ header.site img {
 	margin: 0 auto;
 	max-width: 820px;
 	font:
-		600 clamp(2.3rem, 6.5vw, 4.2rem)/1.05 Fredoka,
+		600 clamp(2.3rem, 6.5vw, 4.2rem)/1.05 var(--font-title),
 		"Segoe UI",
 		Arial,
 		sans-serif;
@@ -179,7 +180,7 @@ main.timeline::before {
 	background: var(--forest);
 	color: var(--cream);
 	font:
-		700 clamp(2.2rem, 6vw, 3.4rem)/1 Fredoka,
+		700 clamp(2.2rem, 6vw, 3.4rem)/1 var(--font-title),
 		"Segoe UI",
 		Arial,
 		sans-serif;
@@ -201,7 +202,7 @@ main.timeline::before {
 	background: var(--gold);
 	color: #3a2a10;
 	font:
-		600 1.05rem Fredoka,
+		600 1.05rem var(--font-title),
 		"Segoe UI",
 		Arial,
 		sans-serif;
@@ -335,7 +336,7 @@ ol.posts {
 .card h3 {
 	margin: 10px 0 6px;
 	font:
-		600 1.32rem/1.2 Fredoka,
+		600 1.32rem/1.2 var(--font-title),
 		"Segoe UI",
 		Arial,
 		sans-serif;
@@ -453,7 +454,7 @@ a.back:hover {
 }
 
 .empty h2 {
-	font-family: Fredoka, "Segoe UI", Arial, sans-serif;
+	font-family: var(--font-title), "Segoe UI", Arial, sans-serif;
 }
 
 /* pagine di testo semplici: "non trovato" */
@@ -466,7 +467,7 @@ a.back:hover {
 	margin: 0 0 24px;
 	color: var(--forest);
 	font:
-		700 clamp(2rem, 5vw, 2.8rem)/1.1 Fredoka,
+		700 clamp(2rem, 5vw, 2.8rem)/1.1 var(--font-title),
 		"Segoe UI",
 		Arial,
 		sans-serif;
@@ -474,7 +475,7 @@ a.back:hover {
 .page h2 {
 	margin: 34px 0 10px;
 	font:
-		600 1.35rem/1.25 Fredoka,
+		600 1.35rem/1.25 var(--font-title),
 		"Segoe UI",
 		Arial,
 		sans-serif;

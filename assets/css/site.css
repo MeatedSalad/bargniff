@@ -2,6 +2,7 @@
 
 :root {
 	color-scheme: only light;
+	--font-title: "Les Flos Sage", "Fredoka", sans-serif; /* font dei titoli */
 	--brown: #432f2c;
 	--gold: #c8a627;
 	--cream: #fbf9e1;
@@ -40,7 +41,7 @@ body {
 h1,
 h2,
 h3 {
-	font-family: "Fredoka", sans-serif;
+	font-family: var(--font-title);
 	font-weight: 600;
 	line-height: 1.05;
 }
@@ -128,7 +129,10 @@ header {
 }
 
 .hero .wrap {
-	max-width: 100%;
+	/* il testo sta nella metà sinistra, così non finisce mai sopra la rana a destra */
+	width: 58%;
+	max-width: none;
+	margin: 0;
 	padding: 0 40px;
 }
 
@@ -140,16 +144,26 @@ header {
 }
 
 .hero-copy h1 {
-	max-width: 900px;
+	max-width: 760px;
 	margin: 0 auto;
-	font-size: clamp(2.6rem, 5.4vw, 4.6rem);
 	color: var(--brown);
+	font-size: clamp(1.7rem, 3vw, 2.8rem);
+	line-height: 1.18;
 	text-align: center;
+	text-wrap: balance;
 }
 
-.hero-copy h1 span {
+/* i quattro versi della filastrocca */
+.hero-copy h1 .verse {
 	display: block;
-	margin-top: 10px;
+	margin-top: 8px;
+}
+
+.hero-copy h1 .verse:first-child {
+	margin-top: 0;
+}
+
+.hero-copy h1 .verse--green {
 	color: var(--forest);
 }
 
@@ -725,7 +739,7 @@ footer {
 	margin-right: 2px;
 	float: left;
 	color: var(--forest);
-	font-family: "Fredoka", sans-serif;
+	font-family: var(--font-title);
 	font-size: 3.4rem;
 	font-weight: 700;
 	line-height: 0.85;
@@ -830,6 +844,70 @@ footer {
 	margin-top: 14px;
 	color: var(--forest);
 	font-weight: 700;
+}
+
+/* articoli: sugli schermi stretti si scorrono di lato (o con le frecce) invece che in verticale */
+
+.scroller {
+	position: relative;
+}
+
+.scroller-arrow {
+	display: none;
+}
+
+@media (max-width: 920px) {
+	.why-grid {
+		display: flex;
+		gap: 16px;
+		padding: 12px 4px 26px;
+		overflow-x: auto;
+		overscroll-behavior-x: contain;
+		scroll-snap-type: x mandatory;
+		scrollbar-width: none;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	.why-grid::-webkit-scrollbar {
+		display: none;
+	}
+
+	.why-grid .why-card {
+		flex: 0 0 min(82%, 340px);
+		scroll-snap-align: center;
+	}
+
+	.scroller-arrow {
+		position: absolute;
+		top: 50%;
+		z-index: 3;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 44px;
+		height: 44px;
+		margin-top: -22px;
+		background: var(--forest);
+		border: 2px solid var(--cream);
+		border-radius: 50%;
+		box-shadow: 0 8px 18px -8px rgba(67, 47, 44, 0.6);
+		color: var(--cream);
+		font-size: 1.3rem;
+		line-height: 1;
+		cursor: pointer;
+	}
+
+	.scroller-arrow[hidden] {
+		display: none;
+	}
+
+	.scroller-arrow--prev {
+		left: -4px;
+	}
+
+	.scroller-arrow--next {
+		right: -4px;
+	}
 }
 
 /* sezione donazione (verde) */
@@ -1281,6 +1359,39 @@ a.post-card:focus-visible {
 	}
 }
 
+/* schermi stretti: il testo sta sopra e il laghetto con la rana sotto, senza sovrapporsi */
+
+@media (max-width: 900px) {
+	.hero {
+		flex-direction: column;
+		justify-content: center;
+		gap: 28px;
+		min-height: auto;
+		padding: 112px 0 64px;
+	}
+
+	.hero .wrap {
+		order: 1;
+		width: 100%;
+		padding: 0 22px;
+	}
+
+	.hero-copy h1 {
+		font-size: clamp(1.6rem, 6.4vw, 2.6rem);
+	}
+
+	.pond {
+		position: relative;
+		top: auto;
+		right: auto;
+		order: 2;
+		width: min(74vw, 380px);
+		margin: 0 auto;
+		transform: none;
+		opacity: 1;
+	}
+}
+
 /* responsive */
 
 @media (max-width: 920px) {
@@ -1290,9 +1401,6 @@ a.post-card:focus-visible {
 	.mission-pond-scene {
 		width: 105%;
 		max-width: 850px;
-	}
-	.why-grid {
-		grid-template-columns: 1fr;
 	}
 	.foot-top {
 		grid-template-columns: 1fr;
@@ -1304,24 +1412,6 @@ a.post-card:focus-visible {
 	.nav {
 		padding: 12px 20px;
 	}
-	.hero {
-		padding-top: 188px;
-	}
-	.hero .wrap {
-		padding: 0 20px;
-	}
-	.hero-copy h1 {
-		font-size: clamp(2.8rem, 12vw, 6rem);
-	}
-
-	.pond {
-		width: 82vw;
-		top: auto;
-		bottom: -6%;
-		transform: none;
-		opacity: 0.9;
-	}
-
 	.wave {
 		height: 90px;
 	}
@@ -1344,38 +1434,48 @@ a.post-card:focus-visible {
 	.bush-5 {
 		right: -14px;
 	}
+	/* laghetto più alto, così ci stanno quattro ninfee con le scritte ben leggibili */
 	.mission-pond {
-		aspect-ratio: 1.25/1;
+		aspect-ratio: 1 / 1;
 	}
+
 	.water-lily {
-		width: 105px;
-		height: 88px;
+		width: 118px;
+		height: 100px;
 	}
+
 	.water-lily button {
-		padding: 0 17px;
-		font-size: 0.85rem;
+		padding: 0 6px;
+		font-size: 1.08rem;
+		letter-spacing: 0;
+		white-space: nowrap;
 	}
 
 	.lily-one {
-		left: 5%;
-		top: 25%;
+		left: 4%;
+		top: 31%;
 	}
 
 	.lily-two {
-		right: 5%;
-		top: 30%;
+		right: 4%;
+		top: 37%;
 	}
 
 	.lily-donation {
 		left: 50%;
-		bottom: 3%;
-		transform: translateX(-50%) scale(0.78) rotate(-5deg);
+		bottom: 2%;
+		transform: translateX(-50%) rotate(-5deg);
 	}
 
 	.lily-contacts {
 		left: 50%;
-		top: 3%;
-		transform: translateX(-50%) scale(0.78) rotate(-4deg);
+		top: 2%;
+		transform: translateX(-50%) rotate(-4deg);
+	}
+
+	.lily-donation:hover,
+	.lily-donation:focus-within {
+		transform: translateX(-50%) scale(1.06) rotate(0);
 	}
 
 	.donation-content-wrap {
@@ -1396,6 +1496,27 @@ a.post-card:focus-visible {
 	}
 	.legend-text p:first-child::first-letter {
 		font-size: 2.6rem;
+	}
+}
+
+/* telefoni molto piccoli: ninfee un po' più compatte per non toccarsi */
+
+@media (max-width: 340px) {
+	.water-lily {
+		width: 106px;
+		height: 90px;
+	}
+
+	.water-lily button {
+		font-size: 1.02rem;
+	}
+
+	.lily-one {
+		left: 2%;
+	}
+
+	.lily-two {
+		right: 2%;
 	}
 }
 
