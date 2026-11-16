@@ -24,9 +24,6 @@ const MONTH_NAMES = [
 	"Dicembre",
 ];
 
-const TONES = ["tone0", "tone1", "tone2"];
-const FROGS = ["/assets/rana-crema.png", "/assets/rana-verde.png", "/assets/rana-marrone.png"];
-
 function linkSups(html) {
 	return html.replace(
 		/<sup data-fn="(\d+)">\d*<\/sup>/g,
@@ -180,19 +177,22 @@ export function renderArchive(articles) {
 	const renderCard = (article) => {
 		const i = cardNumber++;
 		const side = i % 2 === 0 ? "l" : "r";
-		const visual = article.cover
-			? `<img class="cover" src="/api/img/${esc(article.cover)}" alt="" loading="lazy" decoding="async">`
-			: `<span class="icon"><img src="${FROGS[i % FROGS.length]}" alt=""></span>`;
+		// A sinistra la foto (o, senza foto, una rana su fondo marrone); a destra il testo.
+		const thumb = article.cover
+			? `<span class="thumb"><img class="cover" src="/api/img/${esc(article.cover)}" alt="" loading="lazy" decoding="async"></span>`
+			: `<span class="thumb thumb--frog"><img src="/assets/rana-crema.png" alt=""></span>`;
 
 		return `
       <li class="post ${side}" style="--i:${i}">
         <span class="dot" aria-hidden="true"></span>
-        <a class="card ${TONES[i % TONES.length]}" href="/articolo/${esc(article.id)}">
-          ${visual}
-          <time datetime="${esc(article.date)}">${esc(formatDate(article.date))}</time>
-          <h3>${esc(article.title)}</h3>
-          ${article.excerpt ? `<p>${esc(article.excerpt)}</p>` : ""}
-          <span class="more">Leggi l'articolo →</span>
+        <a class="card" href="/articolo/${esc(article.id)}">
+          ${thumb}
+          <div class="card-text">
+            <time datetime="${esc(article.date)}">${esc(formatDate(article.date))}</time>
+            <h3>${esc(article.title)}</h3>
+            ${article.excerpt ? `<p>${esc(article.excerpt)}</p>` : ""}
+            <span class="more">Leggi l'articolo →</span>
+          </div>
         </a>
       </li>`;
 	};
